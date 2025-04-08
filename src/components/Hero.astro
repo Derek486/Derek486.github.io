@@ -2,8 +2,9 @@
 const personalImageAlt = "Miguel Ángel"
 import Badge from "@/components/Badge.astro"
 import LinkedInIcon from "@/components/icons/LinkedIn.astro"
-import MailIcon from "@/components/icons/Mail.astro"
 import SocialPill from "@/components/SocialPill.astro"
+import GitHubIcon from "./icons/GitHub.astro"
+import DownloadIcon from "./icons/Download.astro"
 ---
 
 <div class="max-w-xl">
@@ -23,24 +24,29 @@ import SocialPill from "@/components/SocialPill.astro"
     </a>
   </div>
   <h1
-    class="text-4xl font-bold tracking-tight text-gray-800 sm:text-5xl dark:text-white"
+    class="font-bold tracking-tight text-gray-800 text-2xl sm:text-4xl dark:text-white"
   >
-    Hey, soy midudev
+    👋 Hola, mundo! <br>
+    <span class="dark:text-blue-200 text-blue-400">soy Juan Jose</span>
   </h1>
   <p
     class="mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
   >
-    +15 años de experiencia. <strong
-      >Ingeniero de Software y Creador de Contenido sobre Programación</strong
-    > de Barcelona, España 🇪🇸. Especializado en el desarrollo de aplicaciones web
-    únicas.
+    <strong
+      >Desarrollador web Full Stack y futuro Ingeniero de Sistemas</strong
+    >. Especializado en el desarrollo de aplicaciones y plataformas web
+    atractivas y únicas.
   </p>
   <nav class="flex flex-wrap gap-4 mt-8">
-    <SocialPill href="mailto:miduga@gmail.com">
-      <MailIcon class="size-4" />
-      Contáctame
+    <SocialPill href="/public/files/cv_juan_jose_condori_pinto.pdf" isFill>
+      <DownloadIcon class="size-4" />
+      Descargar CV
     </SocialPill>
-    <SocialPill href="https://linkedin.com/in/midudev">
+    <SocialPill href="https://github.com/Derek486">
+      <GitHubIcon class="size-4" />
+      Github
+    </SocialPill>
+    <SocialPill href="https://www.linkedin.com/in/juan-josé-condori-pinto-878941244">
       <LinkedInIcon class="size-4" />
       LinkedIn
     </SocialPill>
