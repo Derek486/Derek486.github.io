@@ -1,16 +1,16 @@
 ---
-const personalImageAlt = "Miguel Ángel"
-import Badge from "@/components/Badge.astro"
-import LinkedInIcon from "@/components/icons/LinkedIn.astro"
-import SocialPill from "@/components/SocialPill.astro"
-import GitHubIcon from "./icons/GitHub.astro"
-import DownloadIcon from "./icons/Download.astro"
+const personalImageAlt = "Miguel Ángel";
+import Badge from "@/components/Badge.astro";
+import LinkedInIcon from "@/components/icons/LinkedIn.astro";
+import SocialPill from "@/components/SocialPill.astro";
+import GitHubIcon from "./icons/GitHub.astro";
+import DownloadIcon from "./icons/Download.astro";
 ---
 
-<div class="max-w-xl">
-  <div class="flex gap-4 mb-4">
+<div class="flex flex-row-reverse justify-between gap-4">
+  <div class="flex flex-col gap-4 mb-4">
     <img
-      class="rounded-full shadow-lg size-16"
+      class="rounded-full shadow-lg"
       src="/midudev.webp"
       alt={personalImageAlt}
     />
@@ -23,32 +23,36 @@ import DownloadIcon from "./icons/Download.astro"
       <Badge>Disponible para trabajar</Badge>
     </a>
   </div>
-  <h1
-    class="font-bold tracking-tight text-gray-800 text-2xl sm:text-4xl dark:text-white"
-  >
-    👋 Hola, mundo! <br>
-    <span class="dark:text-blue-200 text-blue-400">soy Juan Jose</span>
-  </h1>
-  <p
-    class="mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
-  >
-    <strong
-      >Desarrollador web Full Stack y futuro Ingeniero de Sistemas</strong
-    >. Especializado en el desarrollo de aplicaciones y plataformas web
-    atractivas y únicas.
-  </p>
-  <nav class="flex flex-wrap gap-4 mt-8">
-    <SocialPill href="/public/files/cv_juan_jose_condori_pinto.pdf" isFill>
-      <DownloadIcon class="size-4" />
-      Descargar CV
-    </SocialPill>
-    <SocialPill href="https://github.com/Derek486">
-      <GitHubIcon class="size-4" />
-      Github
-    </SocialPill>
-    <SocialPill href="https://www.linkedin.com/in/juan-josé-condori-pinto-878941244">
-      <LinkedInIcon class="size-4" />
-      LinkedIn
-    </SocialPill>
-  </nav>
+  <div>
+    <h1
+      class="font-bold tracking-tight text-gray-800 text-2xl sm:text-4xl dark:text-white"
+    >
+      👋 Hola, mundo! <br />
+      <span class="dark:text-blue-200 text-blue-400">soy Juan Jose</span>
+    </h1>
+    <p
+      class="mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
+    >
+      <strong
+        >Desarrollador web Full Stack y futuro Ingeniero de Sistemas</strong
+      >. Especializado en el desarrollo de aplicaciones y plataformas web
+      atractivas y únicas.
+    </p>
+    <nav class="flex flex-wrap gap-4 mt-8">
+      <SocialPill href="/public/files/cv_juan_jose_condori_pinto.pdf" isFill>
+        <DownloadIcon class="size-4" />
+        Descargar CV
+      </SocialPill>
+      <SocialPill href="https://github.com/Derek486">
+        <GitHubIcon class="size-4" />
+        Github
+      </SocialPill>
+      <SocialPill
+        href="https://www.linkedin.com/in/juan-josé-condori-pinto-878941244"
+      >
+        <LinkedInIcon class="size-4" />
+        LinkedIn
+      </SocialPill>
+    </nav>
+  </div>
 </div>
