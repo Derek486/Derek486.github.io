@@ -1,0 +1,89 @@
+---
+const personalImageAlt = "Juan José CP";
+import Badge from "@/components/Badge.astro";
+import LinkedInIcon from "@/components/icons/LinkedIn.astro";
+import SocialPill from "@/components/SocialPill.astro";
+import GitHubIcon from "@/components/icons/technologies/GitHub.astro";
+import DownloadIcon from "@/components/icons/Download.astro";
+import Locationicon from "@/components/icons/Location.astro";
+import BirthdayIcon from "@/components/icons/Birthday.astro";
+---
+
+<div class="flex flex-col md:flex-row-reverse justify-between gap-4">
+  <div class="flex flex-col gap-4 mb-4">
+    <img
+      class="rounded-full shadow-lg max-w-48 mx-auto"
+      src="/midudev.webp"
+      alt={personalImageAlt}
+    />
+    <div class="flex items-center justify-center gap-3">
+      <span class="flex items-center gap-1">
+        <Locationicon class="size-5" />
+        Peru
+      </span>
+      <span class="flex items-center gap-1">
+        <BirthdayIcon class="size-5" />
+        <p id="age-paragraph"></p>
+      </span>
+    </div>
+    <a
+      href="https://www.linkedin.com/in/juan-josé-condori-pinto-878941244"
+      target="_blank"
+      rel="noopener"
+      class="flex items-center justify-center transition md:justify-center md:hover:scale-105"
+    >
+      <Badge>Disponible para trabajar</Badge>
+    </a>
+  </div>
+  <div>
+    <h1
+      class="flex font-bold tracking-tight text-gray-800 text-2xl sm:text-4xl dark:text-white"
+    >
+      <p>
+        👋 Hola, mundo!
+        <span class="md:line-clamp-1 dark:text-blue-200 text-blue-400">soy Juan Jose</span>
+      </p>
+    </h1>
+    <p
+      class="mt-6 text-xl text-gray-800 dark:[&>strong]:text-yellow-200 [&>strong]:text-yellow-500 [&>strong]:font-semibold dark:text-gray-300"
+    >
+      <strong
+        >Desarrollador web Full Stack y futuro Ingeniero de Sistemas</strong
+      >. Especializado en el desarrollo de aplicaciones y plataformas web
+      atractivas y útiles.
+    </p>
+    <nav class="flex flex-wrap gap-4 mt-8">
+      <SocialPill href="/public/files/cv_juan_jose_condori_pinto.pdf" isFill>
+        <DownloadIcon class="size-4" />
+        Descargar CV
+      </SocialPill>
+      <SocialPill href="https://github.com/Derek486">
+        <GitHubIcon class="size-4" />
+        Github
+      </SocialPill>
+      <SocialPill
+        href="https://www.linkedin.com/in/juan-josé-condori-pinto-878941244"
+      >
+        <LinkedInIcon class="size-4" />
+        LinkedIn
+      </SocialPill>
+    </nav>
+  </div>
+</div>
+
+<script is:inline>
+  function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
+  const p = document.getElementById("age-paragraph");
+  const age = getAge("2005-04-22");
+  p.textContent = `${age} años`;
+</script>

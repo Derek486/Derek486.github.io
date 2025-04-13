@@ -1,19 +1,19 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import Briefcase from "@/components/icons/Briefcase.astro";
+import BriefcaseIcon from "@/components/icons/Briefcase.astro";
 import CodeIcon from "@/components/icons/Code.astro";
-import Experience from "@/components/Experience.astro";
-import ProfileCheck from "@/components/icons/ProfileCheck.astro";
-import Projects from "@/components/Projects.astro";
+import Experience from "@/fragments/Experience.astro";
+import ProfileCheckIcon from "@/components/icons/ProfileCheck.astro";
+import Projects from "@/fragments/Projects.astro";
 import SectionContainer from "@/components/SectionContainer.astro";
-import Hero from "@/components/Hero.astro";
+import Hero from "@/fragments/Hero.astro";
 import TitleSection from "@/components/TitleSection.astro";
-import AboutMe from "@/components/AboutMe.astro";
+import AboutMe from "@/fragments/AboutMe.astro";
 ---
 
 <Layout
   title="Porfolio de Derek486 - Desarrollador y Programador Web Full Stack"
-  description="Desarrollador Web, móvil y de escritorio apasionado por la tecnología. Especializado en hacer interfaces únicas."
+  description="Desarrollador Web, móvil y de escritorio apasionado por la tecnología."
 >
   <main class="px-4">
     <SectionContainer class="py-16 md:py-36">
@@ -31,7 +31,7 @@ import AboutMe from "@/components/AboutMe.astro";
 
     <SectionContainer id="experiencia">
       <TitleSection>
-        <Briefcase class="size-8" />
+        <BriefcaseIcon class="size-8" />
         Experiencia laboral
       </TitleSection>
       <Experience />
@@ -39,7 +39,7 @@ import AboutMe from "@/components/AboutMe.astro";
 
     <SectionContainer id="sobre-mi">
       <TitleSection>
-        <ProfileCheck class="size-8" />
+        <ProfileCheckIcon class="size-8" />
         Sobre mí
       </TitleSection>
       <AboutMe />
