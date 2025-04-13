@@ -1,5 +1,8 @@
 <h2
-	class={`flex items-center mb-6 text-3xl font-semibold gap-x-3 text-black/80 dark:text-white ${Astro.props.className}`}
+	class={`flex items-center mb-6 gap-3 ${Astro.props.className}`}
 >
-    <slot />
+    <span class="flex items-center gap-3 text-black/80 dark:text-white text-3xl font-semibold">
+        <slot />
+    </span>
+    <slot name="options" />
 </h2>

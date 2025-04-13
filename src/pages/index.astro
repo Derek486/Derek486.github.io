@@ -9,6 +9,8 @@ import SectionContainer from "@/components/SectionContainer.astro";
 import Hero from "@/fragments/Hero.astro";
 import TitleSection from "@/components/TitleSection.astro";
 import AboutMe from "@/fragments/AboutMe.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import MyStack from "@/fragments/MyStack.astro";
 ---
 
 <Layout
@@ -19,30 +21,31 @@ import AboutMe from "@/fragments/AboutMe.astro";
     <SectionContainer class="py-16 md:py-36">
       <Hero />
     </SectionContainer>
+    <div class="space-y-24">
+      <SectionContainer id="proyectos">
+        <TitleSection>
+          <CodeIcon class="size-7" />
+          Proyectos
+          <MyStack />
+        </TitleSection>
+        <Projects />
+      </SectionContainer>
+  
+      <SectionContainer id="experiencia">
+        <TitleSection>
+          <BriefcaseIcon class="size-8" />
+          Experiencia laboral
+        </TitleSection>
+        <Experience />
+      </SectionContainer>
+  
+      <SectionContainer id="sobre-mi">
+        <TitleSection>
+          <ProfileCheckIcon class="size-8" />
+          Sobre mí
+        </TitleSection>
+        <AboutMe />
+      </SectionContainer>
+    </div>
   </main>
-  <div class="space-y-24">
-    <SectionContainer id="proyectos">
-      <TitleSection>
-        <CodeIcon class="size-7" />
-        Proyectos
-      </TitleSection>
-      <Projects />
-    </SectionContainer>
-
-    <SectionContainer id="experiencia">
-      <TitleSection>
-        <BriefcaseIcon class="size-8" />
-        Experiencia laboral
-      </TitleSection>
-      <Experience />
-    </SectionContainer>
-
-    <SectionContainer id="sobre-mi">
-      <TitleSection>
-        <ProfileCheckIcon class="size-8" />
-        Sobre mí
-      </TitleSection>
-      <AboutMe />
-    </SectionContainer>
-  </div>
 </Layout>

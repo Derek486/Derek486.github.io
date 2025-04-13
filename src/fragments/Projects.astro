@@ -1,84 +1,11 @@
 ---
-import { type IProject } from "@/types"
+import LinkButton from "@/components/LinkButton.astro";
+import { type IProject } from "@/shared/types"
+import { TAGS } from "@/shared/values";
 
 import GitHubIcon from "@/components/icons/technologies/GitHub.astro";
-import TailwindIcon from "@/components/icons/technologies/Tailwind.astro";
 import LinkIcon from "@/components/icons/Link.astro";
-import LinkButton from "@/components/LinkButton.astro";
-import SpringBootIcon from "@/components/icons/technologies/SpringBoot.astro";
-import MySQLIcon from "@/components/icons/technologies/MySQL.astro";
-import ReactIcon from "@/components/icons/technologies/React.astro";
-import JWTIcon from "@/components/icons/technologies/JWT.astro";
-import DjangoIcon from "@/components/icons/technologies/Django.astro";
-import SQLiteIcon from "@/components/icons/technologies/SQLite.astro";
-import AngularIcon from "@/components/icons/technologies/Angular.astro";
-import ExpressIcon from "@/components/icons/technologies/Express.astro";
-import MongoDBIcon from "@/components/icons/technologies/MongoDB.astro";
-import NodeJSIcon from "@/components/icons/technologies/NodeJS.astro";
-import TypeScriptIcon from "@/components/icons/technologies/Typescript.astro";
-
-const TAGS = {
-  SPRINGBOOT: {
-    name: "Spring Boot",
-    class: "bg-[#01232a] text-white",
-    icon: SpringBootIcon,
-  },
-  TAILWIND: {
-    name: "Tailwind CSS",
-    class: "bg-[#003159] text-white",
-    icon: TailwindIcon,
-  },
-  MYSQL: {
-    name: "MySQL",
-    class: "bg-[#86d4ea] text-black",
-    icon: MySQLIcon,
-  },
-  REACT: {
-    name: "React",
-    class: "bg-[#204060] text-white",
-    icon: ReactIcon,
-  },
-  JWT: {
-    name: "JWT",
-    class: "bg-[#000000] text-white",
-    icon: JWTIcon,
-  },
-  DJANGO: {
-    name: "Django",
-    class: "bg-[#092E20] text-white",
-    icon: DjangoIcon,
-  },
-  SQLITE: {
-    name: "SQLite",
-    class: "bg-[#003B57] text-white",
-    icon: SQLiteIcon,
-  },
-  ANGULAR: {
-    name: "Angular",
-    class: "bg-[#772f3f] dark:bg-[#49131f] text-white",
-    icon: AngularIcon,
-  },
-  EXPRESS: {
-    name: "Express.js",
-    class: "bg-[#000000] text-white",
-    icon: ExpressIcon,
-  },
-  MONGODB: {
-    name: "MongoDB",
-    class: "bg-[#01431a] text-white",
-    icon: MongoDBIcon,
-  },
-  NODEJS: {
-    name: "Node.js",
-    class: "bg-[#01432a] text-white",
-    icon: NodeJSIcon,
-  },
-  TYPESCRIPT: {
-    name: "TypeScript",
-    class: "bg-[#3178C6] text-white",
-    icon: TypeScriptIcon,
-  },
-};
+import PillTech from "@/components/PillTech.astro";
 
 const PROJECTS: IProject[] = [
   {
@@ -117,7 +44,7 @@ const PROJECTS: IProject[] = [
     PROJECTS.map(({ image, title, description, tags, link, github }) => (
       <article class="flex flex-col space-x-0 space-y-8 group md:flex-row md:space-x-8 md:space-y-0">
         <div class="w-full md:w-1/2">
-          <div class="relative flex flex-col h-full items-center col-span-6 row-span-5 gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
+          <div class="relative flex flex-col h-56 items-center gap-8 transition duration-500 ease-in-out transform shadow-xl overflow-clip rounded-xl sm:rounded-xl md:group-hover:-translate-y-1 md:group-hover:shadow-2xl lg:border lg:border-gray-800 lg:hover:border-gray-700 lg:hover:bg-gray-800/50">
             <img
               alt="Recién llegado vs 5 años en Nueva Zelanda"
               class="object-cover object-top w-full h-56 transition duration-500 sm:h-full md:scale-110 md:group-hover:scale-105"
@@ -135,12 +62,7 @@ const PROJECTS: IProject[] = [
             <ul class="flex flex-wrap mb-2 gap-2">
               {tags.map((tag) => (
                 <li>
-                  <span
-                    class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}
-                  >
-                    <tag.icon class="size-4" />
-                    {tag.name}
-                  </span>
+                  <PillTech tag={tag} />
                 </li>
               ))}
             </ul>
@@ -151,7 +73,7 @@ const PROJECTS: IProject[] = [
             <footer class="flex items-end justify-start mt-4 gap-x-4">
               {github && (
                 <LinkButton href={github}>
-                  <GitHubIcon class="size-6" />
+                  <GitHubIcon class="size-4" />
                   Code
                 </LinkButton>
               )}
