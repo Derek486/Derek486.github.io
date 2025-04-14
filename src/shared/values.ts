@@ -12,8 +12,51 @@ import NodeJSIcon from "@/components/icons/technologies/NodeJS.astro";
 import TypeScriptIcon from "@/components/icons/technologies/Typescript.astro";
 import FigmaIcon from "@/components/icons/technologies/Figma.astro";
 import TauriIcon from "@/components/icons/technologies/Tauri.astro";
+import LaravelIcon from "@/components/icons/technologies/Laravel.astro";
+import GitIcon from "@/components/icons/technologies/Git.astro";
+import PostgreSQLIcon from "@/components/icons/technologies/PostgreSQL.astro";
+import TypescriptIcon from "@/components/icons/technologies/Typescript.astro";
+import SequelizeiCON from "@/components/icons/technologies/Sequelize.astro";
+import IoTIcon from "@/components/icons/technologies/IoT.astro";
+import DockerIcon from "@/components/icons/technologies/Docker.astro";
+import NginxIcon from "@/components/icons/technologies/Nginx.astro";
 
 export const TAGS = {
+  DOCKER: {
+    name: "Docker",
+    class: "bg-[#01236e] text-white",
+    icon: DockerIcon,
+  },
+  IOT: {
+    name: "IoT",
+    class: "bg-[#01236e] text-white",
+    icon: IoTIcon,
+  },
+  NGINX: {
+    name: "Nginx",
+    class: "bg-[#01236e] text-white",
+    icon: NginxIcon,
+  },  
+  SEQUELIZE: {
+    name: "Sequelize",
+    class: "bg-[#01236e] text-white",
+    icon: SequelizeiCON,
+  },  
+  POSTGRESQL: {
+    name: "PostgreSQL",
+    class: "bg-[#01236e] text-white",
+    icon: PostgreSQLIcon,
+  },
+  GIT: {
+    name: "Git",
+    class: "bg-[#01236e] text-white",
+    icon: GitIcon,
+  },
+  LARAVEL: {
+    name: "Laravel",
+    class: "bg-[#01236e] text-white",
+    icon: LaravelIcon,
+  },
   TAURI: {
     name: "Tauri",
     class: "bg-[#01232a] text-white",

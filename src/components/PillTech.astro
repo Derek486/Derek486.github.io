@@ -3,12 +3,19 @@ import type { ITagIcon } from "@/shared/types"
 
 interface Props {
   tag: ITagIcon
+  isImportant?: boolean
 }
 
-const { tag } = Astro.props
+const { tag, isImportant = false } = Astro.props
 ---
 
-<span class={`flex gap-x-2 rounded-full text-xs ${tag.class} py-1 px-2 `}>
+<span 
+  class="flex gap-x-2 rounded-full text-xs py-1 px-2"
+  class:list={{
+    'text-yellow-300 bg-yellow-950': isImportant,
+    [tag.class]: !isImportant
+  }}
+>
   <tag.icon class="size-4" />
   {tag.name}
 </span>

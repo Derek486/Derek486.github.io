@@ -9,8 +9,8 @@ import SectionContainer from "@/components/SectionContainer.astro";
 import Hero from "@/fragments/Hero.astro";
 import TitleSection from "@/components/TitleSection.astro";
 import AboutMe from "@/fragments/AboutMe.astro";
-import LinkButton from "@/components/LinkButton.astro";
 import MyStack from "@/fragments/MyStack.astro";
+import ConstructionIcon from "@/components/icons/Construction.astro";
 ---
 
 <Layout
@@ -22,21 +22,28 @@ import MyStack from "@/fragments/MyStack.astro";
       <Hero />
     </SectionContainer>
     <div class="space-y-24">
-      <SectionContainer id="proyectos">
-        <TitleSection>
-          <CodeIcon class="size-7" />
-          Proyectos
-          <MyStack slot="options" />
-        </TitleSection>
-        <Projects />
-      </SectionContainer>
-  
       <SectionContainer id="experiencia">
         <TitleSection>
           <BriefcaseIcon class="size-8" />
           Experiencia laboral
         </TitleSection>
         <Experience />
+      </SectionContainer>
+
+      <SectionContainer id="proyectos">
+        <TitleSection>
+          <CodeIcon class="size-7" />
+          Proyectos
+        </TitleSection>
+        <Projects />
+      </SectionContainer>
+
+      <SectionContainer id="mi-stack">
+        <TitleSection>
+          <ConstructionIcon class="size-7" />
+          Mi stack
+        </TitleSection>
+        <MyStack />
       </SectionContainer>
   
       <SectionContainer id="sobre-mi">

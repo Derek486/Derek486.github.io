@@ -1,0 +1,29 @@
+---
+import type { ITagIcon } from "@/shared/types";
+import MacPoints from "./MacPoints.astro";
+import PillTech from "./PillTech.astro";
+
+interface Props {
+  title: string
+  stack: ({
+    tag: ITagIcon
+    isImportant?: boolean
+  })[]
+}
+
+const { title, stack } = Astro.props
+---
+
+<section class="flex flex-col shadow-xl rounded-md transition hover:shadow-2xl border border-gray-800 hover:border-gray-700 group">
+  <header class="relative flex justify-center items-center gap-2 font-semibold text-xl p-2 text-yellow-400 dark:text-yellow-300 border-b border-b-gray-800 group-hover:border-b-gray-700">
+    <span class="absolute left-2">
+      <MacPoints />
+    </span>
+    { title }
+  </header>
+  <div class="flex justify-center items-center flex-wrap gap-1 p-2">
+    { stack.map((tech) => (
+      <PillTech tag={tech.tag} isImportant={!!tech.isImportant} />
+    )) }
+  </div>
+</section>
