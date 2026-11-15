@@ -6,7 +6,7 @@ import playground from "../src/data/playground.json" with { type: "json" };
 import site from "../src/data/site.json" with { type: "json" };
 
 test("contact footer matches the centered sections and offers direct contact channels", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("./");
   const footer = page.getByRole("contentinfo");
   await footer.scrollIntoViewIfNeeded();
   await expect(footer.getByRole("heading", { level: 2 })).toContainText(site.contact.eyebrow);
@@ -43,7 +43,7 @@ test("contact footer matches the centered sections and offers direct contact cha
 test("renders full stack content from JSON without runtime errors", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  await page.goto("/");
+  await page.goto("./");
   await expect(page).toHaveTitle(/Full Stack/);
   await expect(page.locator("h1")).toContainText(profile.headlineAccent);
   await expect(page.locator("#proyectos article")).toHaveCount(projects.length);
@@ -57,7 +57,7 @@ test("renders full stack content from JSON without runtime errors", async ({ pag
 });
 
 test("prioritizes the three new projects and preserves the original collection", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("./");
   const primary = page.locator("[data-primary-projects] article");
   const other = page.locator("[data-other-projects] article");
   await expect(page.locator("#proyectos article")).toHaveCount(6);
@@ -80,7 +80,7 @@ test("prioritizes the three new projects and preserves the original collection",
 });
 
 test("navbar becomes a compact frosted pill on scroll", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("./");
   await expect(page.locator("[data-header]")).toHaveAttribute("data-scrolled", "false");
   await page.locator("#proyectos").scrollIntoViewIfNeeded();
   await expect(page.locator("[data-header]")).toHaveAttribute("data-scrolled", "true");
@@ -90,7 +90,7 @@ test("navbar becomes a compact frosted pill on scroll", async ({ page }) => {
 });
 
 test("theme toggles and persists across reloads", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("./");
   await page.getByRole("button", { name: "Activar tema oscuro" }).click();
   await expect(page.locator("html")).toHaveClass(/(?:^|\s)dark(?:\s|$)/);
   await page.reload();
@@ -100,7 +100,7 @@ test("theme toggles and persists across reloads", async ({ page }) => {
 });
 
 test("playground supports keyboard and each layer shows matching content", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("./");
   for (const layer of playground) {
     const button = page.getByRole("button", { name: layer.label, exact: true });
     await button.focus();
@@ -116,7 +116,7 @@ test("playground supports keyboard and each layer shows matching content", async
 });
 
 test("shows verified experience and the expanded technology stack", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("./");
   const entries = page.locator("#experiencia ol > li");
   await expect(entries.first()).toContainText("Smart Reasons");
   await expect(entries.first()).toContainText("Jun. 2025");
@@ -131,7 +131,7 @@ test("shows verified experience and the expanded technology stack", async ({ pag
 });
 
 test("alternates exactly two neutral backgrounds in each theme", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("./");
   const selectors = ["#inicio", "#proyectos", "#mi-stack", "#experiencia", "#sobre-mi", "#contacto"];
   const colors = await Promise.all(selectors.map((selector) => page.locator(selector).evaluate(
     (element) => {
@@ -164,12 +164,12 @@ test("alternates exactly two neutral backgrounds in each theme", async ({ page }
 });
 
 test("images and local downloads exist; viewport has no horizontal overflow", async ({ page, request }) => {
-  await page.goto("/");
+  await page.goto("./");
   for (const project of projects) {
-    expect((await request.get(project.image)).ok()).toBeTruthy();
+    expect((await request.get(`.${project.image}`)).ok()).toBeTruthy();
   }
-  expect((await request.get(profile.resume)).ok()).toBeTruthy();
-  expect((await request.get(profile.image)).ok()).toBeTruthy();
+  expect((await request.get(`.${profile.resume}`)).ok()).toBeTruthy();
+  expect((await request.get(`.${profile.image}`)).ok()).toBeTruthy();
   for (const width of [320, 393, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.evaluate(() => document.fonts.ready);
@@ -180,7 +180,7 @@ test("images and local downloads exist; viewport has no horizontal overflow", as
 
 test("content remains accessible with reduced motion", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/");
+  await page.goto("./");
   await page.getByRole("button", { name: "Infra", exact: true }).click();
   await expect(page.locator("#layer-infra")).toBeVisible();
   await expect.poll(() => page.evaluate(() => document.getAnimations().length)).toBe(0);
@@ -206,7 +206,7 @@ test("main content and native menu work without JavaScript", async ({ browser, b
 
 test("mobile menu closes on Escape, outside click and navigation", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile", "Mobile navigation only");
-  await page.goto("/");
+  await page.goto("./");
   const menu = page.locator("[data-mobile-menu]");
   await page.getByLabel("Abrir menú de navegación").click();
   await expect(menu).toHaveAttribute("open", "");

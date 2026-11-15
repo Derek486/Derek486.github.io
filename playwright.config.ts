@@ -1,12 +1,14 @@
 import { defineConfig, devices } from "@playwright/test";
 import process from "node:process";
 
+const baseURL = "http://127.0.0.1:4325/";
+
 export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
   reporter: "list",
   use: {
-    baseURL: "http://127.0.0.1:4325",
+    baseURL,
     trace: "retain-on-failure",
     launchOptions: {
       executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
@@ -18,7 +20,7 @@ export default defineConfig({
   ],
   webServer: {
     command: "npm run build && npm run preview -- --host 127.0.0.1 --port 4325 --ignore-lock",
-    url: "http://127.0.0.1:4325",
+    url: baseURL,
     reuseExistingServer: false,
     timeout: 120_000,
   },

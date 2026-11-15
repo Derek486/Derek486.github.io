@@ -26,6 +26,46 @@ Antes de ejecutar pruebas por primera vez: `npx playwright install chromium`.
 Para usar Chromium del sistema:
 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm test`.
 
+## Despliegue en GitHub Pages
+
+Repositorio: **`Derek486/Derek486.github.io`**.
+URL prevista: **https://derek486.github.io/**.
+
+1. En el repositorio de GitHub, abre **Settings → Pages**.
+2. En **Build and deployment → Source**, selecciona **GitHub Actions**.
+3. Sube estos cambios a `main`. El workflow
+   [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) comprueba tipos,
+   compila y publica `dist/`. También puedes ejecutarlo desde
+   **Actions → Deploy to GitHub Pages → Run workflow**.
+
+El workflow usa la versión de Node de `.nvmrc`, instala con `npm ci` y autentica
+el despliegue con `GITHUB_TOKEN` y OIDC. No requiere tokens personales ni una rama
+`gh-pages`. La publicación efectiva se comprueba en la pestaña **Actions**.
+
+`astro.config.mjs` define `site: "https://derek486.github.io"` y `base: "/"`.
+El repositorio `Derek486.github.io` publica en la raíz del dominio, sin prefijo.
+Desarrollo, pruebas y despliegue usan la misma base; no se requieren variables
+de entorno específicas para GitHub Pages. Las imágenes, el CV y el favicon
+respetan esta base mediante `src/presentation/utils/asset-url.ts`.
+Los datos JSON conservan sus rutas relativas a `public/`, sin el nombre del repositorio.
+
+Para comprobar localmente el despliegue con la misma base:
+
+```sh
+npm run build
+npm run preview
+# Abrir http://localhost:4321/
+```
+
+Para ejecutar las pruebas de escritorio y móvil con esa base:
+
+```sh
+npm test
+```
+
+Si cambias el nombre del repositorio o usas un dominio propio, actualiza `site`
+y `base` en `astro.config.mjs` y la base de `playwright.config.ts`.
+
 ## Editar contenido
 
 Los datos editables están en **`src/data/`**:

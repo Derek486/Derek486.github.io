@@ -2,6 +2,7 @@
 import type { Profile } from "@/domain/types/profile";
 import type { SiteContent } from "@/domain/types/site-content";
 import SectionHeading from "../components/SectionHeading.astro";
+import { assetUrl } from "../utils/asset-url";
 
 interface Props { profile: Profile; content: SiteContent["about"] }
 const { profile, content } = Astro.props;
@@ -13,7 +14,7 @@ const { profile, content } = Astro.props;
     <div class="grid items-center gap-12 md:grid-cols-[1fr_2fr] md:gap-20">
       <figure data-reveal class="group mx-auto w-full max-w-72">
         <div class="rounded-2xl border border-line bg-surface p-3 shadow-sm transition-transform duration-500 motion-safe:rotate-[-3deg] motion-safe:hover:rotate-0">
-          <img src={profile.image} alt={profile.imageAlt} width="512" height="512" loading="lazy" decoding="async" class="aspect-square w-full rounded-xl bg-ink/5 object-cover" />
+          <img src={assetUrl(profile.image)} alt={profile.imageAlt} width="512" height="512" loading="lazy" decoding="async" class="aspect-square w-full rounded-xl bg-ink/5 object-cover" />
           <figcaption class="px-2 pt-4 pb-1 font-mono text-[10px] text-muted">{profile.shortName} / detrás del código</figcaption>
         </div>
       </figure>

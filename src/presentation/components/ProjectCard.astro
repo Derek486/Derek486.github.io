@@ -3,6 +3,7 @@ import type { Project } from "@/domain/types/project";
 import type { Technology } from "@/domain/types/technology";
 import ActionLink from "./ActionLink.astro";
 import TechnologyList from "./TechnologyList.astro";
+import { assetUrl } from "../utils/asset-url";
 
 interface Props {
   project: Project;
@@ -28,7 +29,7 @@ const { project, technologies, featured = false } = Astro.props;
         <span class="mx-auto font-mono text-[9px] text-zinc-500">{project.id}.app</span>
       </div>}
       <img
-        src={project.image}
+        src={assetUrl(project.image)}
         alt={project.imageAlt}
         width={project.imageWidth ?? 1280}
         height={project.imageHeight ?? 720}

@@ -4,6 +4,7 @@ import type { Profile } from "@/domain/types/profile";
 import NavigationLink from "../components/NavigationLink.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import MenuIcon from "@/components/icons/Menu.astro";
+import { assetUrl } from "../utils/asset-url";
 
 interface Props { navigation: NavigationItem[]; profile: Profile }
 const { navigation, profile } = Astro.props;
@@ -19,13 +20,13 @@ const { navigation, profile } = Astro.props;
       <div class="hidden items-center lg:flex">
         {navigation.map((item) => <NavigationLink item={item} />)}
       </div>
-      <a href={profile.resume} target="_blank" rel="noopener noreferrer" class="hidden min-h-11 items-center gap-2 rounded-full bg-ink/5 px-4 text-xs font-medium text-ink transition-colors hover:bg-ink/10 sm:inline-flex">CV <span aria-hidden="true">↗</span></a>
+      <a href={assetUrl(profile.resume)} target="_blank" rel="noopener noreferrer" class="hidden min-h-11 items-center gap-2 rounded-full bg-ink/5 px-4 text-xs font-medium text-ink transition-colors hover:bg-ink/10 sm:inline-flex">CV <span aria-hidden="true">↗</span></a>
       <ThemeToggle />
       <details data-mobile-menu class="relative lg:hidden">
         <summary aria-label="Abrir menú de navegación" class="grid size-11 cursor-pointer list-none place-items-center rounded-full text-ink transition-colors hover:bg-ink/5 [&::-webkit-details-marker]:hidden"><MenuIcon aria-hidden="true" class="size-5" /></summary>
         <div class="absolute top-14 right-0 flex min-w-56 flex-col gap-1 rounded-2xl border border-line bg-surface p-3 shadow-xl">
           {navigation.map((item) => <NavigationLink item={item} />)}
-          <a href={profile.resume} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-11 items-center rounded-full px-3 text-sm text-muted hover:bg-ink/5">Descargar CV ↗</a>
+          <a href={assetUrl(profile.resume)} target="_blank" rel="noopener noreferrer" class="inline-flex min-h-11 items-center rounded-full px-3 text-sm text-muted hover:bg-ink/5">Descargar CV ↗</a>
         </div>
       </details>
     </div>
