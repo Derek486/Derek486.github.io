@@ -1,0 +1,6 @@
+[
+  { "id": "frontend", "title": "Frontend", "description": "Interfaces conectadas a APIs y componentes para aplicaciones web.", "technologies": ["angular", "vue", "react", "typescript", "tailwind", "figma"] },
+  { "id": "backend", "title": "Backend", "description": "Servicios, lógica de negocio e integración entre aplicaciones.", "technologies": ["csharp", "dotnet", "nodejs", "express", "django", "springboot", "laravel", "kafka"] },
+  { "id": "data", "title": "Bases de datos", "description": "Persistencia, índices y optimización de consultas SQL.", "technologies": ["sqlserver", "postgresql", "mysql", "mongodb", "redis", "sqlite"] },
+  { "id": "tools", "title": "Nube y despliegue", "description": "Servidores Linux, contenedores y procesos de integración y entrega.", "technologies": ["aws", "docker", "linux", "nginx", "git", "cicd", "tauri", "iot"] }
+]

@@ -1,0 +1,39 @@
+---
+import React from "@/components/icons/technologies/React.astro";
+import Angular from "@/components/icons/technologies/Angular.astro";
+import TypeScript from "@/components/icons/technologies/Typescript.astro";
+import Tailwind from "@/components/icons/technologies/Tailwind.astro";
+import Node from "@/components/icons/technologies/NodeJS.astro";
+import Express from "@/components/icons/technologies/Express.astro";
+import Django from "@/components/icons/technologies/Django.astro";
+import Spring from "@/components/icons/technologies/SpringBoot.astro";
+import Laravel from "@/components/icons/technologies/Laravel.astro";
+import JWT from "@/components/icons/technologies/JWT.astro";
+import MySQL from "@/components/icons/technologies/MySQL.astro";
+import MongoDB from "@/components/icons/technologies/MongoDB.astro";
+import PostgreSQL from "@/components/icons/technologies/PostgreSQL.astro";
+import SQLite from "@/components/icons/technologies/SQLite.astro";
+import Sequelize from "@/components/icons/technologies/Sequelize.astro";
+import Docker from "@/components/icons/technologies/Docker.astro";
+import Nginx from "@/components/icons/technologies/Nginx.astro";
+import Git from "@/components/icons/technologies/Git.astro";
+import Tauri from "@/components/icons/technologies/Tauri.astro";
+import IoT from "@/components/icons/technologies/IoT.astro";
+import Figma from "@/components/icons/technologies/Figma.astro";
+import Vue from "@/components/icons/technologies/Vue.astro";
+import CSharp from "@/components/icons/technologies/CSharp.astro";
+import DotNet from "@/components/icons/technologies/DotNet.astro";
+
+interface Props { id: string; class?: string }
+const { id, class: className } = Astro.props;
+const icons = {
+  react: React, angular: Angular, typescript: TypeScript, tailwind: Tailwind,
+  nodejs: Node, express: Express, django: Django, springboot: Spring, laravel: Laravel,
+  jwt: JWT, mysql: MySQL, mongodb: MongoDB, postgresql: PostgreSQL, sqlite: SQLite,
+  sequelize: Sequelize, docker: Docker, nginx: Nginx, git: Git, tauri: Tauri, iot: IoT, figma: Figma,
+  vue: Vue, csharp: CSharp, dotnet: DotNet,
+};
+const Icon = icons[id as keyof typeof icons];
+---
+
+{Icon && <Icon aria-hidden="true" class:list={["grayscale", className]} />}

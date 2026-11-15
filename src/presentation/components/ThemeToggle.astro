@@ -1,0 +1,21 @@
+---
+import Sun from "@/components/icons/Sun.astro";
+import Moon from "@/components/icons/Moon.astro";
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  aria-label="Activar tema oscuro"
+  aria-pressed="false"
+  title="Cambiar tema"
+  class="inline-grid size-11 shrink-0 cursor-pointer place-items-center rounded-full border border-line bg-surface/60 text-ink transition-colors hover:bg-ink/8"
+>
+  <Moon aria-hidden="true" class="size-5 dark:hidden" />
+  <Sun aria-hidden="true" class="hidden size-5 dark:block" />
+</button>
+
+<script>
+  import { initTheme } from "../behaviors/theme";
+  initTheme();
+</script>

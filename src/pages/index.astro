@@ -1,58 +1,27 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import BriefcaseIcon from "@/components/icons/Briefcase.astro";
-import CodeIcon from "@/components/icons/Code.astro";
-import Experience from "@/fragments/Experience.astro";
-import ProfileCheckIcon from "@/components/icons/ProfileCheck.astro";
-import Projects from "@/fragments/Projects.astro";
-import SectionContainer from "@/components/SectionContainer.astro";
-import Hero from "@/fragments/Hero.astro";
-import TitleSection from "@/components/TitleSection.astro";
-import AboutMe from "@/fragments/AboutMe.astro";
-import MyStack from "@/fragments/MyStack.astro";
-import ConstructionIcon from "@/components/icons/Construction.astro";
+import { getPortfolio } from "@/application/get-portfolio";
+import { jsonPortfolioRepository } from "@/infrastructure/repositories/json-portfolio-repository";
+import Header from "@/presentation/sections/Header.astro";
+import Hero from "@/presentation/sections/Hero.astro";
+import Projects from "@/presentation/sections/Projects.astro";
+import Stack from "@/presentation/sections/Stack.astro";
+import Experience from "@/presentation/sections/Experience.astro";
+import About from "@/presentation/sections/About.astro";
+import Footer from "@/presentation/sections/Footer.astro";
+
+const { profile, content, navigation, projects, experiences, technologies, stack, playground } =
+  getPortfolio(jsonPortfolioRepository);
 ---
 
-<Layout
-  title="Porfolio de Derek486 - Desarrollador y Programador Web Full Stack"
-  description="Desarrollador Web, móvil y de escritorio apasionado por la tecnología."
->
-  <main class="px-4">
-    <SectionContainer class="py-16 md:py-36">
-      <Hero />
-    </SectionContainer>
-    <div class="space-y-24">
-      <SectionContainer id="experiencia">
-        <TitleSection>
-          <BriefcaseIcon class="size-8" />
-          Experiencia laboral
-        </TitleSection>
-        <Experience />
-      </SectionContainer>
-
-      <SectionContainer id="proyectos">
-        <TitleSection>
-          <CodeIcon class="size-7" />
-          Proyectos
-        </TitleSection>
-        <Projects />
-      </SectionContainer>
-
-      <SectionContainer id="mi-stack">
-        <TitleSection>
-          <ConstructionIcon class="size-7" />
-          Mi stack
-        </TitleSection>
-        <MyStack />
-      </SectionContainer>
-  
-      <SectionContainer id="sobre-mi">
-        <TitleSection>
-          <ProfileCheckIcon class="size-8" />
-          Sobre mí
-        </TitleSection>
-        <AboutMe />
-      </SectionContainer>
-    </div>
+<Layout title={content.title} description={content.description}>
+  <Header navigation={navigation} profile={profile} />
+  <main id="contenido" tabindex="-1" class="outline-none">
+    <Hero profile={profile} layers={playground} technologies={technologies} />
+    <Projects projects={projects} technologies={technologies} content={content.projects} />
+    <Stack groups={stack} technologies={technologies} content={content.stack} />
+    <Experience experiences={experiences} technologies={technologies} content={content.experience} />
+    <About profile={profile} content={content.about} />
   </main>
+  <Footer profile={profile} content={content.contact} />
 </Layout>

@@ -1,0 +1,22 @@
+---
+import type { Technology } from "@/domain/types/technology";
+import TechnologyIcon from "./TechnologyIcon.astro";
+
+interface Props {
+  ids: string[];
+  technologies: Technology[];
+}
+const { ids, technologies } = Astro.props;
+---
+
+<ul class="flex flex-wrap gap-2" aria-label="Tecnologías">
+  {ids.map((id) => {
+    const technology = technologies.find((item) => item.id === id);
+    return technology && (
+      <li class="inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 px-3 py-1.5 text-xs text-muted">
+        <TechnologyIcon id={id} class="size-3.5 shrink-0" />
+        {technology.name}
+      </li>
+    );
+  })}
+</ul>

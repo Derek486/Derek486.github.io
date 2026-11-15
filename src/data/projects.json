@@ -1,0 +1,90 @@
+[
+  {
+    "id": "engine-alert-manager",
+    "title": "Engine Alert Manager",
+    "category": "Monitoreo industrial y arquitectura de eventos",
+    "description": "Sistema de gestión y monitoreo de motores de rotación constante. Conecta un panel React con servicios .NET y un simulador de datos de vibración en Flask mediante mensajería Kafka.",
+    "github": "https://github.com/Derek486/engine_alert_manager",
+    "image": "/projects/engine-alert-manager.webp",
+    "imageAlt": "Arquitectura de Motor Manager: simulación de vibraciones con Flask, Kafka, backend .NET, PostgreSQL y panel React, desplegados con Docker",
+    "imageWidth": 1672,
+    "imageHeight": 941,
+    "preserveImage": true,
+    "primary": true,
+    "featured": true,
+    "highlights": [
+      "Flujo de datos de vibración simulados entre Flask, Kafka y servicios .NET.",
+      "Autenticación, registro de usuarios y administración de motores desde React.",
+      "Persistencia en PostgreSQL y servicios desplegables con Docker Compose."
+    ],
+    "technologies": ["react", "csharp", "dotnet", "flask", "kafka", "postgresql", "docker"]
+  },
+  {
+    "id": "psis-storage-engine",
+    "title": "PSIS-DB Storage Engine",
+    "category": "Motor de base de datos educativo en C++",
+    "description": "Prototipo modular de un motor de almacenamiento escrito en C++17. Implementa índices B+Tree, persistencia binaria y un intérprete de comandos para explorar cómo funciona una base de datos desde dentro.",
+    "github": "https://github.com/Derek486/psis-storage-engine",
+    "image": "/projects/psis-storage-engine.webp",
+    "imageAlt": "Arquitectura de PSIS-DB con índices B+Tree, cliente y servidor TCP, módulos de almacenamiento y archivos binarios de datos y metadatos",
+    "imageWidth": 1672,
+    "imageHeight": 941,
+    "preserveImage": true,
+    "primary": true,
+    "highlights": [
+      "Índices B+Tree para búsqueda, inserción y eliminación de registros.",
+      "Persistencia de datos y metadatos en archivos binarios .tbl y .meta.",
+      "Intérprete de comandos y servidor TCP separados en módulos."
+    ],
+    "technologies": ["cpp"]
+  },
+  {
+    "id": "os-simulator",
+    "title": "Simulador de sistemas operativos",
+    "category": "Aplicación de escritorio educativa en Java",
+    "description": "Simulador visual que reúne planificación de CPU, memoria virtual y operaciones de entrada/salida. Permite configurar algoritmos, seguir la ejecución de procesos y comparar su comportamiento.",
+    "github": "https://github.com/Derek486/temp_so_simulator",
+    "image": "/projects/os-simulator.webp",
+    "imageAlt": "Simulación completada con diagramas Gantt de CPU y entrada/salida, línea temporal de memoria y métricas de ejecución",
+    "imageWidth": 1349,
+    "imageHeight": 968,
+    "preserveImage": true,
+    "primary": true,
+    "highlights": [
+      "Planificación FCFS, SJF, Round Robin y por prioridades.",
+      "Reemplazo de páginas con FIFO, LRU y el algoritmo óptimo.",
+      "Gantt de CPU y entrada/salida, marcos de memoria y métricas de simulación."
+    ],
+    "technologies": ["java", "swing"]
+  },
+  {
+    "id": "vallesur",
+    "title": "Hotel Vallesur",
+    "category": "Plataforma de gestión · Full Stack",
+    "description": "Sistema de gestión de departamentos para Hoteles Vallesur. Centraliza alquileres, inquilinos, pagos y agentes inmobiliarios, con acceso diferenciado para gerentes y agentes.",
+    "github": "https://github.com/Derek486/hotel-vallesur-manage-stack.git",
+    "image": "/projects/vallesur.webp",
+    "imageAlt": "Interfaz del sistema de gestión de Hotel Vallesur",
+    "technologies": ["react", "springboot", "mysql", "tailwind"]
+  },
+  {
+    "id": "events",
+    "title": "Events Management",
+    "category": "Aplicación web · Backend",
+    "description": "Una plataforma para crear, administrar y participar en eventos. Gestión de usuarios y datos en una aplicación construida con Django.",
+    "github": "https://github.com/Derek486/django-events-management.git",
+    "image": "/projects/events_management.webp",
+    "imageAlt": "Panel de administración de eventos desarrollado con Django",
+    "technologies": ["django", "sqlite"]
+  },
+  {
+    "id": "employee",
+    "title": "Employee App",
+    "category": "Gestión de empleados · MEAN Stack",
+    "description": "Aplicación de gestión de empleados con operaciones CRUD. Una base para explorar la misma solución con distintos lenguajes y frameworks.",
+    "github": "https://github.com/Derek486/employee-app-mean-stack.git",
+    "image": "/projects/employee_app.webp",
+    "imageAlt": "Aplicación de gestión de empleados con Angular",
+    "technologies": ["mongodb", "express", "angular", "nodejs"]
+  }
+]

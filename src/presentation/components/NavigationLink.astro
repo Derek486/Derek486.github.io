@@ -1,0 +1,16 @@
+---
+import type { NavigationItem } from "@/domain/types/navigation-item";
+
+interface Props {
+  item: NavigationItem;
+}
+const { item } = Astro.props;
+---
+
+<a
+  href={item.href}
+  data-nav-link
+  class="group/link inline-flex min-h-11 items-center rounded-full px-3 text-sm text-muted transition-colors hover:bg-ink/5 hover:text-ink aria-[current=location]:bg-accent/8 aria-[current=location]:text-accent"
+>
+  <span class="bg-linear-to-r from-accent via-ink to-accent bg-size-[200%_100%] bg-clip-text group-hover/link:text-transparent motion-safe:group-hover/link:animate-text-sweep">{item.label}</span>
+</a>

@@ -3,24 +3,60 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --animate-fade-in: fade-in 0.15s ease-in;
-  --animate-fade-out: fade-out 0.3s ease-out;
+  --font-sans: "Onest Variable", system-ui, sans-serif;
+  --font-display: "Fraunces Variable", Georgia, serif;
+  --color-canvas: #ffffff;
+  --color-surface: #ffffff;
+  --color-ink: #202024;
+  --color-muted: #202024ba;
+  --color-accent: #202024;
+  --color-line: #20202429;
+  --animate-text-sweep: text-sweep 2s linear infinite;
+  --animate-draw-line: draw-line 1s ease-out 0.5s both;
 
-  @keyframes fade-in {
-    from {
-      opacity: 0%;
-    }
-    to {
-      opacity: 100%;
-    }
+  @keyframes text-sweep {
+    to { background-position: -200% 50%; }
   }
 
-  @keyframes fade-out {
-    from {
-      opacity: 100%;
-    }
-    to {
-      opacity: 0%;
-    }
+  @keyframes draw-line {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+}
+
+/* Theme tokens only. All layout, styling and motion live in Tailwind utilities. */
+@layer base {
+  .dark {
+    --color-canvas: #101012;
+    --color-surface: #101012;
+    --color-ink: #ffffff;
+    --color-muted: #ffffffb8;
+    --color-accent: #ffffff;
+    --color-line: #ffffff2e;
+  }
+
+  :where(a, button, summary):focus-visible {
+    @apply outline-2 outline-offset-4 outline-accent;
+  }
+
+  ::selection {
+    @apply bg-accent text-canvas;
+  }
+}
+
+/* Alternate bands invert the same palette, including nested controls and text. */
+@utility section-alternate {
+  --color-canvas: #202024;
+  --color-surface: #202024;
+  --color-ink: #ffffff;
+  --color-muted: #ffffffb8;
+  --color-accent: #ffffff;
+  --color-line: #ffffff2e;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+
+  @variant dark {
+    --color-canvas: #18181c;
+    --color-surface: #18181c;
   }
 }

@@ -1,0 +1,25 @@
+---
+import type { Profile } from "@/domain/types/profile";
+import type { SiteContent } from "@/domain/types/site-content";
+import SectionHeading from "../components/SectionHeading.astro";
+
+interface Props { profile: Profile; content: SiteContent["about"] }
+const { profile, content } = Astro.props;
+---
+
+<section id="sobre-mi" data-nav-section class="scroll-mt-28 bg-canvas px-6 py-16 md:px-10 md:py-24">
+  <div class="mx-auto max-w-6xl">
+    <SectionHeading {...content} />
+    <div class="grid items-center gap-12 md:grid-cols-[1fr_2fr] md:gap-20">
+      <figure data-reveal class="group mx-auto w-full max-w-72">
+        <div class="rounded-2xl border border-line bg-surface p-3 shadow-sm transition-transform duration-500 motion-safe:rotate-[-3deg] motion-safe:hover:rotate-0">
+          <img src={profile.image} alt={profile.imageAlt} width="512" height="512" loading="lazy" decoding="async" class="aspect-square w-full rounded-xl bg-ink/5 object-cover" />
+          <figcaption class="px-2 pt-4 pb-1 font-mono text-[10px] text-muted">{profile.shortName} / detrás del código</figcaption>
+        </div>
+      </figure>
+      <div data-reveal class="max-w-2xl space-y-5 text-base leading-8 text-muted">
+        {profile.about.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+  </div>
+</section>

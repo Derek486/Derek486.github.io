@@ -1,0 +1,31 @@
+---
+import type { Project } from "@/domain/types/project";
+import type { Technology } from "@/domain/types/technology";
+import type { SiteContent } from "@/domain/types/site-content";
+import SectionHeading from "../components/SectionHeading.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+
+interface Props { projects: Project[]; technologies: Technology[]; content: SiteContent["projects"] }
+const { projects, technologies, content } = Astro.props;
+const primaryProjects = projects.filter((project) => project.primary);
+const otherProjects = projects.filter((project) => !project.primary);
+---
+
+<section id="proyectos" data-nav-section class="section-alternate scroll-mt-28 px-6 py-16 md:px-10 md:py-24">
+  <div class="mx-auto max-w-6xl">
+    <SectionHeading {...content} />
+    {primaryProjects.length > 0 && (
+      <div data-primary-projects class="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 md:gap-y-20">
+        {primaryProjects.map((project) => <ProjectCard project={project} technologies={technologies} featured={project.featured} />)}
+      </div>
+    )}
+    {otherProjects.length > 0 && (
+      <div class:list={[primaryProjects.length > 0 && "mt-16 border-t border-line pt-12 md:mt-20"]}>
+        {primaryProjects.length > 0 && <h2 class="mb-8 text-2xl font-medium tracking-tight text-ink">{content.secondaryTitle}</h2>}
+        <div data-other-projects class="grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
+          {otherProjects.map((project) => <ProjectCard project={project} technologies={technologies} />)}
+        </div>
+      </div>
+    )}
+  </div>
+</section>

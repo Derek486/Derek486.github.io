@@ -1,0 +1,29 @@
+[
+  {
+    "id": "frontend",
+    "label": "Frontend",
+    "title": "Interfaces conectadas a tu producto.",
+    "description": "Desarrollo interfaces web y las integro con APIs para que cada pantalla trabaje con datos reales.",
+    "example": "En Smart Reasons desarrollo interfaces integradas con APIs en una arquitectura de microservicios.",
+    "experienceId": "smart-reasons",
+    "technologies": ["angular", "vue", "react"]
+  },
+  {
+    "id": "backend",
+    "label": "Backend",
+    "title": "Servicios y datos que responden.",
+    "description": "Trabajo con .NET y Node.js, integración de APIs y optimización de consultas SQL.",
+    "example": "En Smart Reasons genero valor mediante la implementación de soluciones eficientes.",
+    "experienceId": "smart-reasons",
+    "technologies": ["csharp", "dotnet", "nodejs", "sqlserver"]
+  },
+  {
+    "id": "infra",
+    "label": "Infra",
+    "title": "Aplicaciones más allá de localhost.",
+    "description": "Trabajo con despliegue en la nube, contenedores y administración de servidores Linux.",
+    "example": "En TECSUP administré servidores Linux y bases de datos PostgreSQL y trabajé con CI/CD.",
+    "experienceId": "tecsup",
+    "technologies": ["aws", "docker", "linux", "cicd"]
+  }
+]

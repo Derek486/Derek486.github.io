@@ -1,0 +1,24 @@
+{
+  "name": "Juan José Condori Pinto",
+  "shortName": "Juan J. Pinto",
+  "role": "Desarrollador Full Stack",
+  "availability": "Disponible para nuevos proyectos",
+  "email": "juanjosecp489@gmail.com",
+  "resume": "/files/cv_juan_jose_condori_pinto.pdf",
+  "image": "/me.png",
+  "imageAlt": "Retrato de Juan José Condori Pinto",
+  "introduction": "Hola, soy Juan José",
+  "headline": "De una idea a",
+  "headlineAccent": "software que funciona.",
+  "description": "Desarrollador Full Stack. Conecto interfaces Angular y Vue con servicios .NET, Node.js y bases de datos SQL.",
+  "focus": "Arequipa, Perú. Desarrollo web, escritorio y nube.",
+  "about": [
+    "Soy Juan José, desarrollador Full Stack, desde Arequipa, Perú. Desarrollo interfaces integradas con APIs en una arquitectura de microservicios y optimizo consultas SQL mediante índices y pruebas de estrés.",
+    "En TECSUP lideré una plataforma de gestión administrativa y control de asistencia con tarjetas RFID. También trabajé en eventos deportivos en tiempo real y en una aplicación de escritorio para inventario y cotizaciones en Bitio.",
+    "Soy egresado de Diseño y Desarrollo de Software en TECSUP y estudio Ingeniería de Sistemas en la Universidad Nacional de San Agustín. Me interesa construir software mantenible, desde la interfaz y los datos hasta su despliegue."
+  ],
+  "socials": [
+    { "label": "GitHub", "href": "https://github.com/Derek486" },
+    { "label": "LinkedIn", "href": "https://www.linkedin.com/in/juan-josé-condori-pinto-878941244" }
+  ]
+}

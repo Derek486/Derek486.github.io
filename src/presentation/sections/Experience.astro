@@ -1,0 +1,31 @@
+---
+import type { Experience } from "@/domain/types/experience";
+import type { Technology } from "@/domain/types/technology";
+import type { SiteContent } from "@/domain/types/site-content";
+import SectionHeading from "../components/SectionHeading.astro";
+import TechnologyList from "../components/TechnologyList.astro";
+
+interface Props { experiences: Experience[]; technologies: Technology[]; content: SiteContent["experience"] }
+const { experiences, technologies, content } = Astro.props;
+---
+
+<section id="experiencia" data-nav-section class="section-alternate scroll-mt-28 px-6 py-16 md:px-10 md:py-24">
+  <div class="mx-auto max-w-6xl">
+    <SectionHeading {...content} />
+    <ol class="border-t border-line">
+      {experiences.map((experience) => (
+        <li id={`experiencia-${experience.id}`} data-reveal class="grid scroll-mt-28 gap-5 border-b border-line py-9 md:grid-cols-[1fr_2fr] md:gap-12">
+          <div>
+            <p class="mb-3 text-xs text-muted">{experience.date}</p>
+            <h3 class="text-base font-semibold text-ink">{experience.company}</h3>
+          </div>
+          <div>
+            <p class="mb-3 text-lg font-medium tracking-tight text-ink">{experience.title}</p>
+            <p class="mb-5 w-full text-sm leading-7 text-muted">{experience.description}</p>
+            <TechnologyList ids={experience.technologies} technologies={technologies} />
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
