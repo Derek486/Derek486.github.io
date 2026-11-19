@@ -9,15 +9,33 @@
     "imageAlt": "Arquitectura de Motor Manager: simulación de vibraciones con Flask, Kafka, backend .NET, PostgreSQL y panel React, desplegados con Docker",
     "imageWidth": 1672,
     "imageHeight": 941,
-    "preserveImage": true,
     "primary": true,
-    "featured": true,
     "highlights": [
       "Flujo de datos de vibración simulados entre Flask, Kafka y servicios .NET.",
       "Autenticación, registro de usuarios y administración de motores desde React.",
       "Persistencia en PostgreSQL y servicios desplegables con Docker Compose."
     ],
-    "technologies": ["react", "csharp", "dotnet", "flask", "kafka", "postgresql", "docker"]
+    "technologies": ["react", "csharp", "dotnet", "flask", "kafka", "postgresql", "docker"],
+    "caseStudy": {
+      "problem": "¿Cómo probar un sistema de monitoreo industrial sin tener un sensor físico conectado? Motor Manager separa la administración de motores de la generación de telemetría. Así se puede registrar un motor y ensayar el flujo con lecturas simuladas.",
+      "caption": "Diagrama del sistema: panel de administración, telemetría simulada y servicios de procesamiento.",
+      "architecture": [
+        { "name": "Flask · Simulación de telemetría", "summary": "El simulador envía datos de prueba asociados a un motor registrado. La generación de lecturas vive fuera del panel, por lo que el flujo se puede probar por separado." },
+        { "name": "Kafka y .NET · Transporte y procesamiento", "summary": "Kafka actúa como intermediario de los eventos. El servicio .NET se integra con el broker y PostgreSQL para gestionar los datos de motores. Docker Compose reúne las dependencias en un entorno común." },
+        { "name": "React · Administración de motores", "summary": "El panel consume la API para registrar usuarios y consultar o modificar motores. Las operaciones de gestión tienen su propio flujo, separado del envío de lecturas." }
+      ],
+      "features": [
+        "Registrar usuarios e iniciar sesión en el panel de administración.",
+        "Crear, consultar, editar y eliminar motores.",
+        "Seleccionar un motor y enviar lecturas de prueba para recorrer el circuito de telemetría."
+      ],
+      "lessons": [
+        "Separar el tráfico de una API de gestión del procesamiento asíncrono de eventos.",
+        "Integrar servicios escritos en distintos lenguajes y configurar sus dependencias con Docker Compose.",
+        "Usar datos simulados para probar una integración antes de depender del hardware."
+      ],
+      "note": "El flujo usa telemetría simulada. No se presentan resultados de detección predictiva ni validación con motores reales."
+    }
   },
   {
     "id": "psis-storage-engine",
@@ -29,14 +47,33 @@
     "imageAlt": "Arquitectura de PSIS-DB con índices B+Tree, cliente y servidor TCP, módulos de almacenamiento y archivos binarios de datos y metadatos",
     "imageWidth": 1672,
     "imageHeight": 941,
-    "preserveImage": true,
     "primary": true,
     "highlights": [
       "Índices B+Tree para búsqueda, inserción y eliminación de registros.",
       "Persistencia de datos y metadatos en archivos binarios .tbl y .meta.",
       "Intérprete de comandos y servidor TCP separados en módulos."
     ],
-    "technologies": ["cpp"]
+    "technologies": ["cpp"],
+    "caseStudy": {
+      "problem": "Una base de datos normalmente oculta cómo interpreta un comando, localiza un registro y lo guarda en disco. PSIS-DB hace visibles esas operaciones en un prototipo educativo escrito en C++17.",
+      "caption": "Organización del motor: cliente y servidor TCP, intérprete, índice y archivos binarios.",
+      "architecture": [
+        { "name": "Cliente TCP · Entrada de comandos", "summary": "Una interfaz de línea de comandos se comunica con el servidor TCP. La capa de red recibe las solicitudes sin asumir el trabajo del índice ni del almacenamiento." },
+        { "name": "Intérprete y motor · Ejecución", "summary": "El intérprete convierte la entrada en operaciones que el motor ejecuta. Crear tablas, insertar, consultar, actualizar y eliminar registros tienen manejadores separados." },
+        { "name": "B+Tree y archivos · Índice y persistencia", "summary": "El árbol B+ organiza las claves para localizar registros. Los datos se guardan en archivos .tbl y la estructura de la tabla en archivos .meta, separados de los comandos de usuario." }
+      ],
+      "features": [
+        "Crear tablas e insertar registros desde la línea de comandos.",
+        "Consultar, actualizar y eliminar registros por clave.",
+        "Guardar las filas y los metadatos de cada tabla en archivos separados."
+      ],
+      "lessons": [
+        "Traducir una estructura de datos a operaciones de búsqueda, inserción y eliminación.",
+        "Separar los formatos binarios del índice, el intérprete y el transporte de red.",
+        "Diseñar casos de prueba para el índice sin depender del servidor TCP."
+      ],
+      "note": "Es un prototipo educativo, no un motor de producción ni una implementación completa de SQL."
+    }
   },
   {
     "id": "os-simulator",
@@ -48,43 +85,125 @@
     "imageAlt": "Simulación completada con diagramas Gantt de CPU y entrada/salida, línea temporal de memoria y métricas de ejecución",
     "imageWidth": 1349,
     "imageHeight": 968,
-    "preserveImage": true,
     "primary": true,
     "highlights": [
       "Planificación FCFS, SJF, Round Robin y por prioridades.",
       "Reemplazo de páginas con FIFO, LRU y el algoritmo óptimo.",
       "Gantt de CPU y entrada/salida, marcos de memoria y métricas de simulación."
     ],
-    "technologies": ["java", "swing"]
+    "technologies": ["java", "swing"],
+    "caseStudy": {
+      "problem": "Las colas de CPU, la memoria y la entrada/salida suelen estudiarse por separado. Esta aplicación permite observar cómo interactúan: un proceso puede esperar por CPU, bloquearse por entrada/salida o necesitar una página que aún no está en memoria.",
+      "caption": "Simulación completada con diagramas Gantt, evolución de los marcos de memoria y registro de eventos.",
+      "architecture": [
+        { "name": "Swing · Configuración de la simulación", "summary": "La interfaz carga procesos desde un archivo y permite elegir el planificador, la política de reemplazo, los marcos de memoria y el quantum cuando se usa Round Robin." },
+        { "name": "Núcleo Java · Coordinación", "summary": "El simulador ejecuta su ciclo en un hilo separado. Coordina el planificador de CPU, el gestor de memoria y las ráfagas de entrada/salida, con módulos distintos para cada responsabilidad." },
+        { "name": "Gantt y métricas · Visualización", "summary": "Swing recibe actualizaciones para dibujar el uso de CPU, los intervalos de entrada/salida y la ocupación de marcos. El registro de eventos ayuda a explicar los cambios de estado." }
+      ],
+      "features": [
+        "Comparar FCFS, SJF, Round Robin y planificación por prioridades.",
+        "Probar el reemplazo de páginas con FIFO, LRU y la política óptima.",
+        "Seguir una ejecución con Gantt, fallos de página, tiempos de espera y registro de eventos."
+      ],
+      "lessons": [
+        "Modelar transiciones entre estados de proceso y explicar cómo afectan a las colas.",
+        "Intercambiar algoritmos de planificación y memoria sin cambiar toda la aplicación.",
+        "Separar el hilo de la simulación del hilo que actualiza la interfaz Swing."
+      ],
+      "note": "Las cifras de la captura pertenecen a una ejecución concreta; no son un benchmark de los algoritmos."
+    }
   },
   {
     "id": "vallesur",
     "title": "Hotel Vallesur",
     "category": "Plataforma de gestión · Full Stack",
     "description": "Sistema de gestión de departamentos para Hoteles Vallesur. Centraliza alquileres, inquilinos, pagos y agentes inmobiliarios, con acceso diferenciado para gerentes y agentes.",
-    "github": "https://github.com/Derek486/hotel-vallesur-manage-stack.git",
+    "github": "https://github.com/Derek486/hotel-vallesur-manage-stack",
     "image": "/projects/vallesur.webp",
-    "imageAlt": "Interfaz del sistema de gestión de Hotel Vallesur",
-    "technologies": ["react", "springboot", "mysql", "tailwind"]
+    "imageAlt": "Pantalla de inicio de sesión de Hotel Vallesur con acceso para gerentes y agentes",
+    "imageWidth": 764,
+    "imageHeight": 371,
+    "technologies": ["react", "springboot", "mysql", "tailwind"],
+    "caseStudy": {
+      "problem": "La gestión de un alquiler une varios registros: departamento, inquilino, contrato y pagos. Vallesur los organiza en una aplicación con dos flujos: el gerente administra departamentos y agentes; el agente lleva contratos y cobros.",
+      "caption": "Inicio de sesión de Hotel Vallesur, punto de entrada a los paneles de gerentes y agentes.",
+      "architecture": [
+        { "name": "React · Flujos de gerente y agente", "summary": "El frontend separa las páginas de gerencia de las de agentes. Los servicios HTTP de React aíslan las peticiones de las pantallas de departamentos, inquilinos, contratos y pagos." },
+        { "name": "Spring Boot · API y lógica de negocio", "summary": "El backend organiza las operaciones en controladores, servicios y repositorios. El acceso utiliza JWT y la API expone recursos de alquiler y de administración de usuarios." },
+        { "name": "MySQL y JPA · Modelo de alquiler", "summary": "El modelo relacional representa usuarios, departamentos, inquilinos, contratos y pagos. Los repositorios JPA conectan esas entidades con la persistencia." }
+      ],
+      "features": [
+        "Administrar departamentos y agentes desde el panel de gerencia.",
+        "Registrar inquilinos y asociarlos con contratos de alquiler.",
+        "Registrar y consultar pagos desde el flujo del agente."
+      ],
+      "lessons": [
+        "Traducir responsabilidades de negocio en pantallas y operaciones diferenciadas por rol.",
+        "Modelar en SQL las relaciones entre contratos, inquilinos y pagos.",
+        "Integrar formularios React con una API Spring Boot organizada por capas."
+      ]
+    }
   },
   {
     "id": "events",
     "title": "Events Management",
     "category": "Aplicación web · Backend",
     "description": "Una plataforma para crear, administrar y participar en eventos. Gestión de usuarios y datos en una aplicación construida con Django.",
-    "github": "https://github.com/Derek486/django-events-management.git",
+    "github": "https://github.com/Derek486/django-events-management",
     "image": "/projects/events_management.webp",
-    "imageAlt": "Panel de administración de eventos desarrollado con Django",
-    "technologies": ["django", "sqlite"]
+    "imageAlt": "Catálogo de eventos en Django con portadas, menú de organizadores y opciones de orden",
+    "imageWidth": 1918,
+    "imageHeight": 752,
+    "technologies": ["django", "sqlite"],
+    "caseStudy": {
+      "problem": "Publicar un evento y participar en él son acciones distintas. La aplicación separa ambas: cada evento tiene un organizador, mientras que la inscripción relaciona a cada participante con el evento que eligió.",
+      "caption": "Catálogo de eventos con portadas, fechas y acceso a los perfiles de organizadores.",
+      "architecture": [
+        { "name": "Django · Rutas y plantillas", "summary": "El servidor renderiza los listados, el detalle de cada evento y los formularios. Los recursos estáticos y las portadas cargadas por usuarios se gestionan por separado." },
+        { "name": "Vistas · Eventos y participación", "summary": "El código separa las vistas de cuenta, eventos y participaciones. El detalle de un evento consulta sus inscripciones para mostrar si el usuario ya está participando." },
+        { "name": "ORM y SQLite · Usuarios e inscripciones", "summary": "Evento conserva el vínculo con su autor. RegistroEvento relaciona a un usuario con un evento y conserva la fecha de inscripción; Django mapea estos modelos a SQLite." }
+      ],
+      "features": [
+        "Crear, editar y eliminar eventos con portada opcional.",
+        "Ordenar el catálogo por nombre, fecha del evento o publicación y consultar los eventos de cada organizador.",
+        "Inscribirse en un evento y consultar la participación desde su detalle."
+      ],
+      "lessons": [
+        "Representar una relación entre usuarios y eventos con un modelo intermedio que conserva información propia.",
+        "Combinar autenticación, vistas y plantillas de Django en un flujo completo.",
+        "Gestionar imágenes cargadas por usuarios aparte de los recursos estáticos."
+      ]
+    }
   },
   {
     "id": "employee",
     "title": "Employee App",
     "category": "Gestión de empleados · MEAN Stack",
     "description": "Aplicación de gestión de empleados con operaciones CRUD. Una base para explorar la misma solución con distintos lenguajes y frameworks.",
-    "github": "https://github.com/Derek486/employee-app-mean-stack.git",
+    "github": "https://github.com/Derek486/employee-app-mean-stack",
     "image": "/projects/employee_app.webp",
-    "imageAlt": "Aplicación de gestión de empleados con Angular",
-    "technologies": ["mongodb", "express", "angular", "nodejs"]
+    "imageAlt": "Formulario de alta de empleados y tabla de registros en Angular",
+    "imageWidth": 1920,
+    "imageHeight": 691,
+    "technologies": ["mongodb", "express", "angular", "nodejs"],
+    "caseStudy": {
+      "problem": "Un directorio de empleados es un dominio acotado para practicar una aplicación full stack: además de listar registros, hay que enviarlos desde formularios, validar los datos y reflejar los cambios persistidos en la interfaz.",
+      "caption": "Vista del directorio de empleados en Angular.",
+      "architecture": [
+        { "name": "Angular · Listado y formularios", "summary": "Las pantallas de listado y edición comparten un servicio Angular para consultar la API. La interfaz presenta los datos y los mensajes de validación de los formularios." },
+        { "name": "Express y Node.js · API de empleados", "summary": "El backend separa rutas y controladores. Las operaciones de creación y edición admiten una imagen y pasan por un esquema Zod que comprueba los campos recibidos." },
+        { "name": "Mongoose y MongoDB · Persistencia", "summary": "El modelo Mongoose define la estructura de un empleado. Los controladores consultan y actualizan los documentos de MongoDB a través de ese modelo." }
+      ],
+      "features": [
+        "Listar y consultar fichas de empleados.",
+        "Crear, modificar o eliminar registros desde el frontend.",
+        "Adjuntar una imagen al registro y mostrar errores cuando los datos no cumplen el esquema."
+      ],
+      "lessons": [
+        "Mantener un contrato claro entre un formulario Angular y una API REST.",
+        "Validar las peticiones en el servidor y devolver errores útiles a la interfaz.",
+        "Separar las rutas HTTP, la lógica de las operaciones y el modelo de persistencia."
+      ]
+    }
   }
 ]

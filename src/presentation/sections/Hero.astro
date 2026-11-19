@@ -10,7 +10,7 @@ interface Props { profile: Profile; layers: PlaygroundLayer[]; technologies: Tec
 const { profile, layers, technologies } = Astro.props;
 ---
 
-<section id="inicio" data-spotlight class="relative isolate overflow-hidden px-6 pt-36 pb-16 md:px-10 md:pt-48 md:pb-24">
+<section id="inicio" data-spotlight class="relative isolate overflow-hidden bg-primary px-6 pt-36 pb-16 md:px-10 md:pt-48 md:pb-24">
   <div data-spotlight-glow aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(360px_circle_at_var(--pointer-x,50%)_var(--pointer-y,50%),color-mix(in_srgb,var(--color-ink)_6%,transparent),transparent_75%)] opacity-0 transition-opacity duration-500 data-[active=true]:opacity-100 motion-reduce:hidden"></div>
   <div class="mx-auto grid max-w-6xl grid-cols-1 items-center gap-14 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
     <div class="min-w-0">
@@ -22,7 +22,7 @@ const { profile, layers, technologies } = Astro.props;
       <h1 data-reveal class="max-w-2xl text-balance font-display text-[clamp(2.8rem,5.6vw,5rem)] leading-[1.06] font-medium tracking-[-0.055em] text-ink">
         {profile.headline}
         <span class="mt-1 block">
-          <span class="relative">{profile.headlineAccent}<svg aria-hidden="true" viewBox="0 0 400 16" preserveAspectRatio="none" class="pointer-events-none absolute -bottom-3 left-0 h-4 w-full overflow-visible fill-none stroke-accent/65 stroke-2"><path pathLength="1" d="M2 12 Q170 -3 398 10" class="[stroke-dasharray:1] motion-safe:animate-draw-line" /></svg></span>
+          <span class="relative">{profile.headlineAccent}<svg aria-hidden="true" viewBox="0 0 400 16" preserveAspectRatio="none" class="pointer-events-none absolute -bottom-3 left-0 h-4 w-full overflow-visible fill-none stroke-accent/65 stroke-2"><path pathLength="1" d="M2 12 Q170 -3 398 10" class="hero-underline [stroke-dasharray:1] motion-safe:animate-draw-line" /></svg></span>
         </span>
       </h1>
       <p data-reveal class="mt-9 max-w-md text-pretty text-base leading-8 text-muted">{profile.description}</p>
@@ -42,6 +42,12 @@ const { profile, layers, technologies } = Astro.props;
     <a href="#proyectos" class="inline-flex min-h-11 items-center gap-3 text-xs text-muted transition-colors hover:text-accent">Un poco de mi trabajo <span aria-hidden="true">↓</span></a>
   </div>
 </section>
+
+<style>
+  :global([data-portfolio-entry]) .hero-underline {
+    animation-play-state: paused;
+  }
+</style>
 
 <script>
   import { initSpotlight } from "../behaviors/spotlight";

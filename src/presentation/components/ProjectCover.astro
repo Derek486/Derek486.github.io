@@ -1,0 +1,50 @@
+---
+import type { Project } from "@/domain/types/project";
+import { assetUrl } from "../utils/asset-url";
+
+interface Props { project: Project; showcase?: boolean }
+const { project, showcase = false } = Astro.props;
+---
+
+<div data-project-cover class:list={[showcase && "mx-auto w-fit max-w-full"]}>
+  <div data-reveal={showcase ? "showcase-media" : "project-media"} class:list={["min-w-0", showcase && "flex justify-center"]}>
+    <img
+      src={assetUrl(project.image)}
+      alt={project.imageAlt}
+      width={project.imageWidth}
+      height={project.imageHeight}
+      loading={showcase ? "eager" : "lazy"}
+      decoding={showcase ? undefined : "async"}
+      fetchpriority={showcase ? "high" : undefined}
+      style={{ "--project-transition": `project-${project.id}` }}
+      class:list={[
+        "cover-image block h-auto max-w-full object-contain motion-safe:[view-transition-name:var(--project-transition)]",
+        showcase ? "max-h-[min(76svh,46rem)] w-auto" : "w-full",
+      ]}
+    />
+  </div>
+</div>
+
+<style>
+  .cover-image {
+    box-shadow:
+      0 20px 36px -24px color-mix(in srgb, #101012 55%, transparent),
+      0 4px 12px -7px color-mix(in srgb, #101012 42%, transparent);
+  }
+
+  :global(.dark) .cover-image {
+    box-shadow: 0 22px 40px -24px #000c, 0 5px 12px -7px #0009;
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+    .cover-image {
+      transform: var(--cover-tilt, none);
+      transition: transform 360ms cubic-bezier(0.2, 0, 0, 1);
+    }
+  }
+</style>
+
+<script>
+  import { initProjectCovers } from "../behaviors/project-covers";
+  initProjectCovers();
+</script>

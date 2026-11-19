@@ -2,49 +2,48 @@
 import type { Project } from "@/domain/types/project";
 import type { Technology } from "@/domain/types/technology";
 import ActionLink from "./ActionLink.astro";
+import ProjectCover from "./ProjectCover.astro";
 import TechnologyList from "./TechnologyList.astro";
-import { assetUrl } from "../utils/asset-url";
+import { projectAnchor, projectUrl } from "../utils/project-url";
 
 interface Props {
   project: Project;
   technologies: Technology[];
-  featured?: boolean;
+  coverSide?: "left" | "right";
 }
-const { project, technologies, featured = false } = Astro.props;
+const { project, technologies, coverSide } = Astro.props;
 ---
 
-<article data-reveal data-project={project.id} data-featured={featured ? "true" : undefined} class:list={["group min-w-0", featured && "md:col-span-2"]}>
+<article
+  id={projectAnchor(project.id)}
+  data-project={project.id}
+  class:list={[
+    "min-w-0 scroll-mt-28",
+    coverSide && "not-first:border-t not-first:border-line not-first:pt-8 md:grid md:grid-cols-2 md:items-center md:gap-8 md:not-first:pt-12 lg:gap-12",
+  ]}
+>
   <a
-    href={project.link ?? project.github}
-    target="_blank"
-    rel="noopener noreferrer"
-    aria-label={`Ver ${project.title} (abre en otra pestaña)`}
-    class:list={["relative mb-6 flex overflow-hidden rounded-2xl border border-line bg-surface/65 p-5 transition duration-500 motion-safe:hover:-translate-y-1 sm:p-9", featured && "md:p-14"]}
+    href={projectUrl(project.id)}
+    aria-label={`Ver proyecto: ${project.title}`}
+    class:list={[
+      "group/cover mb-5 block min-w-0",
+      coverSide && "md:row-start-1 md:mb-0",
+      coverSide === "right" ? "md:col-start-2" : coverSide && "md:col-start-1",
+    ]}
   >
-    <div class="w-full overflow-hidden rounded-lg border border-black/10 bg-white shadow-[0_12px_32px_-8px_#00000030] transition-transform duration-700 motion-safe:group-hover:scale-[1.025]">
-      {!project.preserveImage && <div aria-hidden="true" class="flex h-7 items-center gap-1.5 border-b border-zinc-200 bg-zinc-50 px-3">
-        <span class="size-1.5 rounded-full bg-zinc-300"></span>
-        <span class="size-1.5 rounded-full bg-zinc-300"></span>
-        <span class="size-1.5 rounded-full bg-zinc-300"></span>
-        <span class="mx-auto font-mono text-[9px] text-zinc-500">{project.id}.app</span>
-      </div>}
-      <img
-        src={assetUrl(project.image)}
-        alt={project.imageAlt}
-        width={project.imageWidth ?? 1280}
-        height={project.imageHeight ?? 720}
-        loading="lazy"
-        decoding="async"
-        class:list={[
-          "aspect-video w-full object-top",
-          project.preserveImage ? "object-contain" : "object-cover",
-          featured && !project.preserveImage && "md:aspect-[2.3/1]",
-        ]}
-      />
-    </div>
-    <span aria-hidden="true" class="absolute right-3 bottom-3 grid size-10 place-items-center rounded-full border border-white/50 bg-white/85 text-xl text-zinc-900 backdrop-blur-sm transition-transform motion-safe:group-hover:-rotate-45">↗</span>
+    <ProjectCover project={project} />
+    <span aria-hidden="true" class="mt-3 flex items-center justify-end gap-2 text-sm font-medium text-ink decoration-muted underline-offset-4 group-hover/cover:underline">
+      Ver proyecto <span class="text-base leading-none motion-safe:transition-transform motion-safe:group-hover/cover:translate-x-0.5">→</span>
+    </span>
   </a>
-  <div class:list={["flex flex-col gap-5", featured && "md:flex-row md:items-start md:justify-between md:gap-10"]}>
+  <div
+    data-reveal="project-details"
+    class:list={[
+      "flex min-w-0 flex-col gap-5",
+      coverSide && "md:row-start-1",
+      coverSide === "left" ? "md:col-start-2" : coverSide && "md:col-start-1",
+    ]}
+  >
     <div class="max-w-2xl">
       <p class="mb-2 text-xs text-muted">{project.category}</p>
       <h3 class="mb-3 text-2xl font-semibold tracking-tight text-ink">{project.title}</h3>

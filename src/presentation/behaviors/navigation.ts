@@ -12,7 +12,7 @@ export function initNavigation() {
     const trigger = Math.min(window.innerHeight * 0.4, 300);
     const active = sections.filter((section) => section.getBoundingClientRect().top <= trigger).at(-1);
     links.forEach((link) => {
-      if (active && link.hash === `#${active.id}`) {
+      if (active && link.pathname === window.location.pathname && link.hash === `#${active.id}`) {
         link.setAttribute("aria-current", "location");
       } else {
         link.removeAttribute("aria-current");

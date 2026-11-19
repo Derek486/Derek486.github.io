@@ -1,0 +1,88 @@
+---
+import type { Project } from "@/domain/types/project";
+import type { Technology } from "@/domain/types/technology";
+import ActionLink from "../components/ActionLink.astro";
+import ProjectArchitecture from "../components/ProjectArchitecture.astro";
+import ProjectCover from "../components/ProjectCover.astro";
+import TechnologyList from "../components/TechnologyList.astro";
+import { assetUrl } from "../utils/asset-url";
+import { projectAnchor, projectUrl } from "../utils/project-url";
+
+interface Props { project: Project; nextProject: Project; technologies: Technology[] }
+const { project, nextProject, technologies } = Astro.props;
+const { problem, caption, architecture, features, lessons, note } = project.caseStudy;
+const home = assetUrl("/");
+---
+
+<article id="inicio">
+  <header class="px-6 pt-28 pb-10 md:px-10 md:pt-32 md:pb-14">
+    <div class="mx-auto max-w-6xl">
+      <a href={`${home}#${projectAnchor(project.id)}`} class="mb-8 inline-flex min-h-11 items-center gap-3 text-sm font-medium text-muted transition-colors hover:text-ink md:mb-10">
+        <span aria-hidden="true">←</span> Volver a proyectos
+      </a>
+      <div class="grid gap-5 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:items-end lg:gap-12">
+        <div>
+          <p class="mb-3 text-sm font-medium text-muted">{project.category}</p>
+          <h1 class="text-balance font-display text-[clamp(2.5rem,6vw,5rem)] leading-[1.04] tracking-[-0.05em] text-ink">{project.title}</h1>
+        </div>
+        <div class="space-y-5">
+          <p class="max-w-xl text-pretty text-base leading-7 text-muted">{project.description}</p>
+          <TechnologyList ids={project.technologies} technologies={technologies} />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section aria-label="Vista del proyecto" class="section-alternate px-6 py-8 md:px-10 md:py-12">
+    <figure class="mx-auto max-w-6xl">
+      <ProjectCover project={project} showcase />
+      <figcaption class="mx-auto mt-6 max-w-prose text-center text-sm leading-6 text-muted">{caption}</figcaption>
+    </figure>
+  </section>
+
+  <div class="px-6 py-14 md:px-10 md:py-20">
+    <div class="mx-auto max-w-6xl space-y-12 md:space-y-16">
+      <section aria-labelledby="problema" class="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-10">
+        <h2 id="problema" class="font-display text-3xl tracking-tight text-ink md:text-4xl">Qué resuelve</h2>
+        <p class="max-w-prose text-pretty text-base leading-8 text-muted">{problem}</p>
+      </section>
+
+      <div class="grid gap-12 border-y border-line py-10 md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] md:gap-12 lg:gap-20">
+        <ProjectArchitecture modules={architecture} />
+        <section aria-labelledby="funcionalidades">
+          <h2 id="funcionalidades" class="mb-5 font-display text-3xl tracking-tight text-ink md:text-4xl">Qué permite hacer</h2>
+          <ul class="list-disc space-y-3 pl-5 text-sm leading-7 text-muted marker:text-ink">
+            {features.map((feature) => <li>{feature}</li>)}
+          </ul>
+        </section>
+      </div>
+
+      <section aria-labelledby="aprendizajes" class="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-10">
+        <h2 id="aprendizajes" class="font-display text-3xl tracking-tight text-ink md:text-4xl">Aprendizajes</h2>
+        <div class="max-w-prose">
+          <ul class="list-disc space-y-3 pl-5 text-base leading-7 text-muted marker:text-ink">
+            {lessons.map((lesson) => <li>{lesson}</li>)}
+          </ul>
+          {note && <p class="mt-5 border-l border-line pl-4 text-sm leading-6 text-muted">{note}</p>}
+        </div>
+      </section>
+
+      <div class="flex flex-wrap gap-3 border-t border-line pt-8">
+        <ActionLink href={project.github} target="_blank" variant="secondary" arrow={false}>
+          Ver código en GitHub <span aria-hidden="true">↗</span>
+        </ActionLink>
+        {project.link && <ActionLink href={project.link} target="_blank" variant="secondary">Ver demo</ActionLink>}
+      </div>
+    </div>
+  </div>
+
+  <nav aria-label="Navegación entre proyectos" class="border-t border-line bg-canvas px-6 py-8 md:px-10 md:py-12">
+    <a href={projectUrl(nextProject.id)} class="group/next mx-auto flex max-w-6xl items-center justify-between gap-4">
+      <span>
+        <span class="mb-2 block text-sm text-muted">Siguiente proyecto</span>
+        <span class="block text-pretty font-display text-2xl leading-tight tracking-tight text-ink md:text-4xl">{nextProject.title}</span>
+      </span>
+      <span aria-hidden="true" class="grid size-11 shrink-0 place-items-center rounded-full border border-line text-lg text-ink transition-colors group-hover/next:bg-ink group-hover/next:text-canvas">→</span>
+    </a>
+  </nav>
+</article>

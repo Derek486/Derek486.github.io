@@ -1,0 +1,36 @@
+---
+import type { GetStaticPaths } from "astro";
+import type { Portfolio } from "@/domain/types/portfolio";
+import type { Project } from "@/domain/types/project";
+import { getPortfolio } from "@/application/get-portfolio";
+import { jsonPortfolioRepository } from "@/infrastructure/repositories/json-portfolio-repository";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/presentation/sections/Header.astro";
+import Footer from "@/presentation/sections/Footer.astro";
+import ProjectShowcase from "@/presentation/sections/ProjectShowcase.astro";
+import { assetUrl } from "@/presentation/utils/asset-url";
+
+interface Props extends Pick<Portfolio, "profile" | "content" | "navigation" | "technologies"> {
+  project: Project;
+  nextProject: Project;
+}
+
+export const getStaticPaths = (() => {
+  const { projects, profile, content, navigation, technologies } = getPortfolio(jsonPortfolioRepository);
+  const ordered = [...projects.filter(({ primary }) => primary), ...projects.filter(({ primary }) => !primary)];
+  return ordered.map((project, index) => ({
+    params: { id: project.id },
+    props: { project, nextProject: ordered[(index + 1) % ordered.length], profile, content, navigation, technologies },
+  }));
+}) satisfies GetStaticPaths;
+
+const { project, nextProject, profile, content, navigation, technologies } = Astro.props;
+---
+
+<Layout title={`${project.title} | ${profile.shortName}`} description={project.description}>
+  <Header navigation={navigation} profile={profile} homePath={assetUrl("/")} />
+  <main id="contenido" tabindex="-1" class="bg-primary outline-none">
+    <ProjectShowcase project={project} nextProject={nextProject} technologies={technologies} />
+  </main>
+  <Footer profile={profile} content={content.contact} />
+</Layout>

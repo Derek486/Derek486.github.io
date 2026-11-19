@@ -1,0 +1,149 @@
+---
+import Code from "@/components/icons/Code.astro";
+---
+
+<div id="portfolio-entry" class="entry" hidden>
+  <div data-entry-panel class="panel panel-left" aria-hidden="true"></div>
+  <div class="panel panel-right" aria-hidden="true"></div>
+  <Code class="mark" aria-hidden="true" />
+  <button type="button" class="skip">Omitir intro</button>
+</div>
+
+<script is:inline>
+  (() => {
+    const motion = matchMedia("(prefers-reduced-motion: reduce)");
+    if (motion.matches || location.hash || performance.getEntriesByType("navigation")[0]?.type === "back_forward") return;
+
+    try {
+      if (sessionStorage.getItem("portfolio-entry-seen")) return;
+      sessionStorage.setItem("portfolio-entry-seen", "1");
+    } catch {
+      // The intro can still finish normally when storage is unavailable.
+    }
+
+    const root = document.documentElement;
+    const entry = document.getElementById("portfolio-entry");
+    const panel = entry.querySelector("[data-entry-panel]");
+    const skip = entry.querySelector("button");
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    function reveal() {
+      if (!root.hasAttribute("data-portfolio-entry")) return;
+      root.removeAttribute("data-portfolio-entry");
+      const skipFocused = document.activeElement === skip;
+      entry.inert = true;
+      if (skipFocused) {
+        document.getElementById("contenido")?.focus({ preventScroll: true });
+      }
+      document.dispatchEvent(new Event("portfolio:entry-reveal"));
+    }
+
+    function finish() {
+      controller.abort();
+      clearTimeout(fallback);
+      reveal();
+      entry.hidden = true;
+    }
+
+    panel.addEventListener("animationstart", reveal, { signal });
+    panel.addEventListener("animationend", finish, { signal });
+    panel.addEventListener("animationcancel", finish, { signal });
+    skip.addEventListener("click", finish, { signal });
+    motion.addEventListener("change", finish, { signal });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") finish();
+    }, { signal });
+    document.addEventListener("focusin", (event) => {
+      if (!entry.contains(event.target)) finish();
+    }, { signal });
+    window.addEventListener("scroll", finish, { signal, passive: true });
+    window.addEventListener("hashchange", finish, { signal });
+    window.addEventListener("pagehide", finish, { signal });
+
+    // Fail open if the CSS animation is unavailable or does not dispatch events.
+    const fallback = setTimeout(finish, 1600);
+    root.setAttribute("data-portfolio-entry", "");
+    entry.hidden = false;
+  })();
+</script>
+
+<style>
+  .entry {
+    --open-at: 760ms;
+    --open-duration: 520ms;
+    --open-ease: cubic-bezier(0.76, 0, 0.24, 1);
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    display: grid;
+    place-items: center;
+    overflow: clip;
+    color: var(--color-ink);
+  }
+
+  .entry[hidden] { display: none; }
+  .entry[inert] { pointer-events: none; }
+
+  .panel {
+    position: absolute;
+    inset-block: 0;
+    width: calc(50% + 1px);
+    background: var(--color-primary);
+    animation: open-panel var(--open-duration) var(--open-ease) var(--open-at) both;
+  }
+
+  .panel-left { left: 0; --exit-x: -101%; }
+  .panel-right { right: 0; --exit-x: 101%; }
+
+  .entry[inert] .panel-left { border-right: 1px solid var(--color-line); }
+  .entry[inert] .panel-right { border-left: 1px solid var(--color-line); }
+
+  .mark {
+    position: relative;
+    width: clamp(5rem, 16vw, 8.75rem);
+    height: auto;
+    stroke-width: 1.35;
+    animation: exit-mark 220ms ease-in var(--open-at) both;
+  }
+
+  .mark :global(path) {
+    stroke-dasharray: 1;
+    animation: draw-mark 390ms cubic-bezier(0.2, 0, 0.2, 1) both;
+  }
+
+  .mark :global(path:nth-child(2)) { animation-delay: 100ms; }
+  .mark :global(path:nth-child(3)) { animation-delay: 180ms; }
+
+  .skip {
+    position: absolute;
+    bottom: max(1.25rem, env(safe-area-inset-bottom));
+    min-height: 44px;
+    padding-inline: 1rem;
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    cursor: pointer;
+    animation: exit-mark 180ms ease-in var(--open-at) both;
+  }
+
+  .skip:hover { color: var(--color-ink); }
+
+  @keyframes draw-mark {
+    from { stroke-dashoffset: 1; opacity: 0; }
+    20%, to { opacity: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes exit-mark {
+    to { opacity: 0; }
+  }
+
+  @keyframes open-panel {
+    from { transform: translateX(0); }
+    to { transform: translateX(var(--exit-x)); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .entry { display: none; }
+  }
+</style>

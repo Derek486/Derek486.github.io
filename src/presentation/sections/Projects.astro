@@ -15,8 +15,10 @@ const otherProjects = projects.filter((project) => !project.primary);
   <div class="mx-auto max-w-6xl">
     <SectionHeading {...content} />
     {primaryProjects.length > 0 && (
-      <div data-primary-projects class="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 md:gap-y-20">
-        {primaryProjects.map((project) => <ProjectCard project={project} technologies={technologies} featured={project.featured} />)}
+      <div data-primary-projects class="flex flex-col gap-10 md:gap-12">
+        {primaryProjects.map((project, index) => (
+          <ProjectCard project={project} technologies={technologies} coverSide={index % 2 === 0 ? "right" : "left"} />
+        ))}
       </div>
     )}
     {otherProjects.length > 0 && (

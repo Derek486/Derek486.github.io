@@ -30,11 +30,16 @@ const { description, title } = Astro.props;
     </script>
   </head>
   <body class="min-h-screen bg-canvas text-ink">
+    <slot name="entry" />
     <a href="#contenido" class="fixed top-3 left-4 z-[100] -translate-y-24 rounded-full bg-ink px-5 py-3 text-sm text-canvas focus:translate-y-0">Saltar al contenido</a>
     <slot />
     <script>
       import { initReveals } from "@/presentation/behaviors/reveal";
-      initReveals();
+      if (document.documentElement.hasAttribute("data-portfolio-entry")) {
+        document.addEventListener("portfolio:entry-reveal", initReveals, { once: true });
+      } else {
+        initReveals();
+      }
     </script>
   </body>
 </html>

@@ -1,0 +1,44 @@
+---
+import type { Project } from "@/domain/types/project";
+
+interface Props { modules: Project["caseStudy"]["architecture"] }
+const { modules } = Astro.props;
+---
+
+<section aria-labelledby="arquitectura" class="min-w-0">
+  <h2 id="arquitectura" class="mb-5 font-display text-3xl tracking-tight text-ink md:text-4xl">Arquitectura</h2>
+  <p class="mb-6 text-sm leading-6 text-muted">Abre cada módulo para ver qué hace.</p>
+  <div class="border-b border-line">
+    {modules.map((module, index) => (
+      <details name="project-modules" open={index === 0} class="group/module border-t border-line">
+        <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 py-4 text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden">
+          {module.name}
+          <span aria-hidden="true" class="relative grid size-7 shrink-0 place-items-center rounded-full border border-line group-open/module:bg-ink group-open/module:text-canvas">
+            <span class="h-px w-2.5 bg-current"></span>
+            <span class="absolute h-2.5 w-px bg-current group-open/module:scale-y-0 motion-safe:transition-transform"></span>
+          </span>
+        </summary>
+        <p class="max-w-prose pb-5 pr-6 text-sm leading-7 text-muted">{module.summary}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (interpolate-size: allow-keywords) and (transition-behavior: allow-discrete) {
+      details::details-content {
+        interpolate-size: allow-keywords;
+        block-size: 0;
+        overflow: clip;
+        opacity: 0;
+        transition: block-size 280ms ease, opacity 200ms ease, content-visibility 280ms allow-discrete;
+      }
+
+      details[open]::details-content {
+        block-size: auto;
+        opacity: 1;
+      }
+    }
+  }
+</style>

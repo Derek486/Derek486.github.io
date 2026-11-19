@@ -5,12 +5,14 @@
 @theme {
   --font-sans: "Onest Variable", system-ui, sans-serif;
   --font-display: "Fraunces Variable", Georgia, serif;
-  --color-canvas: #ffffff;
+  --color-primary: #ffffff;
+  --color-canvas: #fafafa;
   --color-surface: #ffffff;
+  --color-alternate: #f5f5f6;
   --color-ink: #202024;
   --color-muted: #202024ba;
   --color-accent: #202024;
-  --color-line: #20202429;
+  --color-line: #e4e4e7;
   --animate-text-sweep: text-sweep 2s linear infinite;
   --animate-draw-line: draw-line 1s ease-out 0.5s both;
 
@@ -24,15 +26,32 @@
   }
 }
 
-/* Theme tokens only. All layout, styling and motion live in Tailwind utilities. */
+/* Keep transitions native to navigation, and don't opt in for reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: 380ms;
+    animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  ::view-transition-group(root) {
+    animation-duration: 240ms;
+  }
+}
+
 @layer base {
   .dark {
+    --color-primary: #101012;
     --color-canvas: #101012;
-    --color-surface: #101012;
-    --color-ink: #ffffff;
-    --color-muted: #ffffffb8;
-    --color-accent: #ffffff;
-    --color-line: #ffffff2e;
+    --color-surface: #202024;
+    --color-alternate: #18181c;
+    --color-ink: #f5f5f6;
+    --color-muted: #f5f5f6b8;
+    --color-accent: #f5f5f6;
+    --color-line: #35353b;
   }
 
   :where(a, button, summary):focus-visible {
@@ -44,19 +63,6 @@
   }
 }
 
-/* Alternate bands invert the same palette, including nested controls and text. */
 @utility section-alternate {
-  --color-canvas: #202024;
-  --color-surface: #202024;
-  --color-ink: #ffffff;
-  --color-muted: #ffffffb8;
-  --color-accent: #ffffff;
-  --color-line: #ffffff2e;
-  background-color: var(--color-canvas);
-  color: var(--color-ink);
-
-  @variant dark {
-    --color-canvas: #18181c;
-    --color-surface: #18181c;
-  }
+  background-color: var(--color-alternate);
 }

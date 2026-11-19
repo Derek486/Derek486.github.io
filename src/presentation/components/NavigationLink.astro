@@ -3,12 +3,13 @@ import type { NavigationItem } from "@/domain/types/navigation-item";
 
 interface Props {
   item: NavigationItem;
+  homePath?: string;
 }
-const { item } = Astro.props;
+const { item, homePath = "" } = Astro.props;
 ---
 
 <a
-  href={item.href}
+  href={item.href.startsWith("#") ? `${homePath}${item.href}` : item.href}
   data-nav-link
   class="group/link inline-flex min-h-11 items-center rounded-full px-3 text-sm text-muted transition-colors hover:bg-ink/5 hover:text-ink aria-[current=location]:bg-accent/8 aria-[current=location]:text-accent"
 >

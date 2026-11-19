@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import { getPortfolio } from "@/application/get-portfolio";
 import { jsonPortfolioRepository } from "@/infrastructure/repositories/json-portfolio-repository";
+import PortfolioEntry from "@/presentation/components/PortfolioEntry.astro";
 import Header from "@/presentation/sections/Header.astro";
 import Hero from "@/presentation/sections/Hero.astro";
 import Projects from "@/presentation/sections/Projects.astro";
@@ -15,6 +16,7 @@ const { profile, content, navigation, projects, experiences, technologies, stack
 ---
 
 <Layout title={content.title} description={content.description}>
+  <PortfolioEntry slot="entry" />
   <Header navigation={navigation} profile={profile} />
   <main id="contenido" tabindex="-1" class="outline-none">
     <Hero profile={profile} layers={playground} technologies={technologies} />

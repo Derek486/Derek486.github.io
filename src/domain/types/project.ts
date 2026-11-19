@@ -6,12 +6,18 @@ export interface Project {
   github: string;
   image: string;
   imageAlt: string;
+  imageWidth: number;
+  imageHeight: number;
+  caseStudy: {
+    problem: string;
+    caption: string;
+    architecture: { name: string; summary: string }[];
+    features: string[];
+    lessons: string[];
+    note?: string;
+  };
   link?: string;
   technologies: string[];
   primary?: boolean;
-  featured?: boolean;
   highlights?: string[];
-  preserveImage?: boolean;
-  imageWidth?: number;
-  imageHeight?: number;
 }

@@ -67,3 +67,20 @@ Imágenes facilitadas por el usuario, convertidas a WebP sin recortar el conteni
 
 Las dos primeras son diagramas representativos de arquitectura; la tercera es
 una captura de la aplicación. Los originales se conservan en sus repositorios.
+
+## Estudios de caso
+
+Las fichas en `src/data/projects.json` se contrastaron con estos archivos públicos
+de GitHub. La revisión fue de código y documentación; no se ejecutaron los proyectos.
+
+| Proyecto | Fuentes revisadas |
+| --- | --- |
+| Engine Alert Manager | [README y Docker Compose](https://github.com/Derek486/engine_alert_manager), [documentación de React y Flask](https://github.com/Derek486/engine_alert_manager/tree/main/front-cluster) |
+| PSIS-DB | [README](https://github.com/Derek486/psis-storage-engine), [módulos de C++](https://github.com/Derek486/psis-storage-engine/tree/main/src) y [pruebas del árbol B+](https://github.com/Derek486/psis-storage-engine/tree/main/tests) |
+| Simulador de sistemas operativos | [README](https://github.com/Derek486/temp_so_simulator), [núcleo Java y actualización de Swing](https://github.com/Derek486/temp_so_simulator/tree/main/src/com/ossimulator) |
+| Hotel Vallesur | [README del proyecto integrado](https://github.com/Derek486/hotel-vallesur-manage-stack), [pantallas React](https://github.com/Derek486/hotel-vallesur-manage-front/tree/main/src) y [capas Spring Boot](https://github.com/Derek486/hotel-vallesur-manage-back/tree/main/src/main/java) |
+| Events Management | [README](https://github.com/Derek486/django-events-management), [modelos, rutas y vistas Django](https://github.com/Derek486/django-events-management/tree/main/eventos) |
+| Employee App | [README](https://github.com/Derek486/employee-app-mean-stack), [rutas y validación Express](https://github.com/Derek486/employee-app-mean-stack/tree/main/backend/src) y [pantallas y servicio Angular](https://github.com/Derek486/employee-app-mean-stack/tree/main/frontend/src/app) |
+
+Los aprendizajes describen habilidades que se practican en cada proyecto a partir
+de su implementación. No se infieren contribuciones individuales ni impacto medido.

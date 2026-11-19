@@ -75,7 +75,7 @@ Los datos editables están en **`src/data/`**:
 | `profile.json` | Nombre, rol, disponibilidad, biografía, redes, correo y CV |
 | `site.json` | SEO y textos de las secciones |
 | `navigation.json` | Enlaces compartidos por menú móvil y escritorio |
-| `projects.json` | Proyectos, prioridad, imágenes, puntos destacados, repositorios y demos opcionales (`link`) |
+| `projects.json` | Proyectos, imágenes, estudios de caso, repositorios y demos opcionales (`link`) |
 | `experience.json` | Historial de experiencia |
 | `technologies.json` | Catálogo de identificadores y nombres |
 | `stack.json` | Grupos de tecnologías |
@@ -87,10 +87,14 @@ deben existir en `technologies.json`; una referencia inválida detiene la compil
 con un mensaje claro.
 
 - `primary: true` coloca el proyecto en el bloque principal.
-- `featured: true` permite ocupar el ancho completo dentro de ese bloque.
+- En escritorio, las portadas principales alternan derecha e izquierda con el
+  mismo ancho. En móvil, cada portada va antes del texto.
 - `highlights` contiene los aspectos técnicos destacados, sin métricas inventadas.
-- `preserveImage: true` muestra la imagen completa, sin recortarla ni añadir un
-  marco de navegador ficticio. `imageWidth` e `imageHeight` indican su tamaño original.
+- `imageWidth` e `imageHeight` indican el tamaño original. Las portadas se
+  muestran completas, sin marco ficticio, en la tarjeta y el estudio de caso.
+- `caseStudy` aporta el problema, el pie de imagen, los módulos de arquitectura,
+  las funcionalidades y los aprendizajes; `note` permite aclarar el alcance.
+  Astro genera una página estática por proyecto en `/proyectos/<id>/`.
 
 Engine Alert Manager encabeza la selección, seguido de PSIS-DB y el simulador de
 sistemas operativos. Hotel Vallesur, Events Management y Employee App se mantienen
@@ -136,14 +140,23 @@ sus componentes.
 
 ## Interacciones y accesibilidad
 
+- En la primera visita al inicio por pestaña, el símbolo `</>` se dibuja a
+  pantalla completa y dos paneles se abren para dar paso a las animaciones del
+  hero. Se puede omitir; no aparece en enlaces directos ni con movimiento reducido.
 - Navbar amplio que se convierte en píldora con vidrio esmerilado al hacer scroll.
+- Línea de experiencia centrada con hitos alternados en escritorio. En móvil,
+  la línea queda a la izquierda para mantener los hitos en una columna.
 - Revelado de secciones, subrayado dibujado y microinteracciones con Tailwind y
   Web Animations API.
+- Las portadas aparecen en perspectiva al entrar en vista y se inclinan con un
+  cursor preciso. En navegadores compatibles, la imagen continúa con una
+  transición nativa al abrir el caso. Los casos funcionan sin JavaScript e
+  incluyen arquitectura desplegable con controles HTML.
 - Spotlight ligero del hero, solo con cursor preciso y sin movimiento reducido.
 - Panel Frontend / Backend / Infra con herramientas y ejemplos de experiencia,
   operable con ratón, tacto y teclado, sin pseudocódigo decorativo.
-- Paleta de blanco y obsidiana alternada por sección; el tema oscuro utiliza dos
-  fondos más profundos. Los tokens se invierten en las franjas para mantener contraste.
+- Paleta editorial clara de blanco, canvas y franjas suaves. En oscuro, los
+  fondos obsidiana se separan de las tarjetas con bordes y texto de alto contraste.
 - Tema claro/oscuro persistente, sin destello inicial; sigue funcionando si el
   navegador bloquea almacenamiento.
 - Menú móvil nativo con cierre por Escape, navegación y clic exterior.

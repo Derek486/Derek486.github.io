@@ -12,16 +12,40 @@ const { experiences, technologies, content } = Astro.props;
 <section id="experiencia" data-nav-section class="section-alternate scroll-mt-28 px-6 py-16 md:px-10 md:py-24">
   <div class="mx-auto max-w-6xl">
     <SectionHeading {...content} />
-    <ol class="border-t border-line">
-      {experiences.map((experience) => (
-        <li id={`experiencia-${experience.id}`} data-reveal class="grid scroll-mt-28 gap-5 border-b border-line py-9 md:grid-cols-[1fr_2fr] md:gap-12">
-          <div>
-            <p class="mb-3 text-xs text-muted">{experience.date}</p>
-            <h3 class="text-base font-semibold text-ink">{experience.company}</h3>
-          </div>
-          <div>
-            <p class="mb-3 text-lg font-medium tracking-tight text-ink">{experience.title}</p>
-            <p class="mb-5 w-full text-sm leading-7 text-muted">{experience.description}</p>
+    <ol data-experience-timeline role="list" class="[--timeline-axis:0.5rem] [--timeline-node-top:0.625rem] md:[--timeline-axis:50%]">
+      {experiences.map((experience, index) => (
+        <li
+          id={`experiencia-${experience.id}`}
+          class="relative scroll-mt-28 pl-8 not-last:pb-10 md:grid md:grid-cols-2 md:gap-x-20 md:pl-0 md:not-last:pb-12"
+        >
+          {index < experiences.length - 1 && (
+            <span aria-hidden="true" class="absolute top-(--timeline-node-top) left-(--timeline-axis) bottom-[calc(-1*var(--timeline-node-top))] w-px -translate-x-1/2 bg-ink/20">
+              <span data-timeline-segment class="block h-full origin-top scale-y-[var(--timeline-progress,0)] bg-accent motion-reduce:hidden"></span>
+            </span>
+          )}
+          <span
+            aria-hidden="true"
+            class:list={[
+              "absolute top-(--timeline-node-top) left-(--timeline-axis) h-px w-4 -translate-y-1/2 bg-ink/20 md:w-8",
+              index % 2 !== 0 && "md:-translate-x-full",
+            ]}
+          ></span>
+          <span
+            aria-hidden="true"
+            data-timeline-node
+            class="absolute top-(--timeline-node-top) left-(--timeline-axis) size-2.5 -translate-1/2 rounded-full border border-muted bg-alternate data-[reached]:border-accent data-[reached]:bg-accent"
+          ></span>
+          <div
+            data-reveal="experience"
+            class:list={[
+              "min-w-0 w-full max-w-md md:row-start-1",
+              index % 2 === 0 ? "md:col-start-2" : "md:col-start-1 md:justify-self-end",
+            ]}
+          >
+            <p class="text-sm tabular-nums text-muted">{experience.date}</p>
+            <p class="mt-1 text-sm font-medium text-ink">{experience.company}</p>
+            <h3 class="mt-3 mb-2 text-xl font-semibold tracking-tight text-ink">{experience.title}</h3>
+            <p class="mb-4 text-sm leading-7 text-muted">{experience.description}</p>
             <TechnologyList ids={experience.technologies} technologies={technologies} />
           </div>
         </li>
@@ -29,3 +53,8 @@ const { experiences, technologies, content } = Astro.props;
     </ol>
   </div>
 </section>
+
+<script>
+  import { initExperienceTimeline } from "../behaviors/experience-timeline";
+  initExperienceTimeline();
+</script>
