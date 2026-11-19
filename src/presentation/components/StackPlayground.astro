@@ -1,6 +1,7 @@
 ---
 import type { PlaygroundLayer } from "@/domain/types/playground-layer";
 import type { Technology } from "@/domain/types/technology";
+import SpotlightGlow from "./SpotlightGlow.astro";
 import TechnologyList from "./TechnologyList.astro";
 
 interface Props {
@@ -11,7 +12,8 @@ const { layers, technologies } = Astro.props;
 ---
 
 <div data-playground data-reveal class="relative mx-auto w-full min-w-0 max-w-md lg:ml-auto">
-  <div class="overflow-hidden rounded-2xl border border-line bg-surface">
+  <div data-spotlight class="glass-surface relative isolate overflow-clip rounded-2xl border border-line">
+    <SpotlightGlow />
     <h2 class="px-6 pt-6 text-base font-semibold text-ink">Qué puedo aportar</h2>
     <div data-layer-controls class="mt-5 flex gap-1 border-b border-line px-4 pb-3" role="group" aria-label="Explorar capacidades de desarrollo full stack">
       {layers.map((layer, index) => (

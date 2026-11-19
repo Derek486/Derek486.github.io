@@ -20,7 +20,7 @@ const { experiences, technologies, content } = Astro.props;
         >
           {index < experiences.length - 1 && (
             <span aria-hidden="true" class="absolute top-(--timeline-node-top) left-(--timeline-axis) bottom-[calc(-1*var(--timeline-node-top))] w-px -translate-x-1/2 bg-ink/20">
-              <span data-timeline-segment class="block h-full origin-top scale-y-[var(--timeline-progress,0)] bg-accent motion-reduce:hidden"></span>
+              <span data-timeline-segment class="timeline-light block h-full origin-top scale-y-[var(--timeline-progress,0)] bg-accent motion-reduce:hidden"></span>
             </span>
           )}
           <span
@@ -53,6 +53,16 @@ const { experiences, technologies, content } = Astro.props;
     </ol>
   </div>
 </section>
+
+<style>
+  .timeline-light {
+    box-shadow: 0 0 0.6rem 0.1rem color-mix(in srgb, var(--light-cast) 36%, transparent);
+  }
+
+  [data-timeline-node][data-reached] {
+    box-shadow: 0 0 0.75rem color-mix(in srgb, var(--light-cast) 48%, transparent);
+  }
+</style>
 
 <script>
   import { initExperienceTimeline } from "../behaviors/experience-timeline";

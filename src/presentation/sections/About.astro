@@ -12,8 +12,8 @@ const { profile, content } = Astro.props;
   <div class="mx-auto max-w-6xl">
     <SectionHeading {...content} />
     <div class="grid items-center gap-12 md:grid-cols-[1fr_2fr] md:gap-20">
-      <figure data-reveal class="group mx-auto w-full max-w-72">
-        <div class="rounded-2xl border border-line bg-surface p-3 shadow-sm transition-transform duration-500 motion-safe:rotate-[-3deg] motion-safe:hover:rotate-0">
+      <figure data-reveal class="portrait-light relative isolate mx-auto w-full max-w-72">
+        <div class="glass-surface rounded-2xl border border-line p-3 motion-safe:rotate-[-3deg] motion-safe:transition-transform motion-safe:duration-500 motion-safe:hover:rotate-0">
           <img src={assetUrl(profile.image)} alt={profile.imageAlt} width="512" height="512" loading="lazy" decoding="async" class="aspect-square w-full rounded-xl bg-ink/5 object-cover" />
           <figcaption class="px-2 pt-4 pb-1 font-mono text-[10px] text-muted">{profile.shortName} / detrás del código</figcaption>
         </div>
@@ -24,3 +24,14 @@ const { profile, content } = Astro.props;
     </div>
   </div>
 </section>
+
+<style>
+  .portrait-light::before {
+    position: absolute;
+    z-index: -1;
+    inset: -1.25rem;
+    background: radial-gradient(ellipse at 54% 62%, color-mix(in srgb, var(--light-cast) 27%, transparent), transparent 72%);
+    content: "";
+    pointer-events: none;
+  }
+</style>

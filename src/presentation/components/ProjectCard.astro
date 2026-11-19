@@ -3,6 +3,7 @@ import type { Project } from "@/domain/types/project";
 import type { Technology } from "@/domain/types/technology";
 import ActionLink from "./ActionLink.astro";
 import ProjectCover from "./ProjectCover.astro";
+import SpotlightGlow from "./SpotlightGlow.astro";
 import TechnologyList from "./TechnologyList.astro";
 import { projectAnchor, projectUrl } from "../utils/project-url";
 
@@ -17,11 +18,15 @@ const { project, technologies, coverSide } = Astro.props;
 <article
   id={projectAnchor(project.id)}
   data-project={project.id}
+  data-spotlight
   class:list={[
-    "min-w-0 scroll-mt-28",
-    coverSide && "not-first:border-t not-first:border-line not-first:pt-8 md:grid md:grid-cols-2 md:items-center md:gap-8 md:not-first:pt-12 lg:gap-12",
+    "project-glass glass-surface relative isolate min-w-0 scroll-mt-28 rounded-2xl border border-line p-4 lg:p-5",
+    coverSide
+      ? "md:grid md:grid-cols-2 md:items-center md:gap-8 lg:gap-12"
+      : "flex flex-col",
   ]}
 >
+  <SpotlightGlow />
   <a
     href={projectUrl(project.id)}
     aria-label={`Ver proyecto: ${project.title}`}
@@ -40,7 +45,7 @@ const { project, technologies, coverSide } = Astro.props;
     data-reveal="project-details"
     class:list={[
       "flex min-w-0 flex-col gap-5",
-      coverSide && "md:row-start-1",
+      coverSide ? "md:row-start-1" : "grow justify-between",
       coverSide === "left" ? "md:col-start-2" : coverSide && "md:col-start-1",
     ]}
   >
@@ -61,3 +66,10 @@ const { project, technologies, coverSide } = Astro.props;
     </div>
   </div>
 </article>
+
+<style>
+  .project-glass {
+    background-image: none;
+    box-shadow: none;
+  }
+</style>

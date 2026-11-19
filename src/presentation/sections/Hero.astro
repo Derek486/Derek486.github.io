@@ -10,8 +10,9 @@ interface Props { profile: Profile; layers: PlaygroundLayer[]; technologies: Tec
 const { profile, layers, technologies } = Astro.props;
 ---
 
-<section id="inicio" data-spotlight class="relative isolate overflow-hidden bg-primary px-6 pt-36 pb-16 md:px-10 md:pt-48 md:pb-24">
-  <div data-spotlight-glow aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(360px_circle_at_var(--pointer-x,50%)_var(--pointer-y,50%),color-mix(in_srgb,var(--color-ink)_6%,transparent),transparent_75%)] opacity-0 transition-opacity duration-500 data-[active=true]:opacity-100 motion-reduce:hidden"></div>
+<section id="inicio" class="relative isolate overflow-hidden bg-primary px-6 pt-36 pb-16 md:px-10 md:pt-48 md:pb-24">
+  <div aria-hidden="true" class="hero-light hero-light-top"></div>
+  <div aria-hidden="true" class="hero-light hero-light-base"></div>
   <div class="mx-auto grid max-w-6xl grid-cols-1 items-center gap-14 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
     <div class="min-w-0">
       <p data-reveal class="mb-7 inline-flex items-center gap-2 rounded-full border border-line bg-surface/60 px-3 py-2 text-xs text-muted">
@@ -44,12 +45,41 @@ const { profile, layers, technologies } = Astro.props;
 </section>
 
 <style>
-  :global([data-portfolio-entry]) .hero-underline {
+  .hero-light {
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    width: min(75rem, 115vw);
+    height: min(40rem, 84%);
+    background: radial-gradient(ellipse at center, color-mix(in srgb, var(--light-cast) var(--light-strength), transparent), transparent 68%);
+  }
+
+  .hero-light-top {
+    --light-strength: 16%;
+    --drift-x: -7%;
+    --drift-y: 9%;
+    top: -26%;
+    right: -25%;
+  }
+
+  .hero-light-base {
+    --light-strength: 10%;
+    --drift-x: 8%;
+    --drift-y: -10%;
+    bottom: -35%;
+    left: -27%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-light { animation: drift-light 4.8s ease-in-out both; }
+  }
+
+  :global([data-portfolio-entry]) :is(.hero-underline, .hero-light) {
     animation-play-state: paused;
   }
-</style>
 
-<script>
-  import { initSpotlight } from "../behaviors/spotlight";
-  initSpotlight();
-</script>
+  @keyframes drift-light {
+    from { transform: translate(0, 0) scale(0.96); }
+    to { transform: translate(var(--drift-x), var(--drift-y)) scale(1.09); }
+  }
+</style>

@@ -1,5 +1,6 @@
 ---
 import type { Technology } from "@/domain/types/technology";
+import SpotlightGlow from "./SpotlightGlow.astro";
 import TechnologyIcon from "./TechnologyIcon.astro";
 
 interface Props {
@@ -13,7 +14,8 @@ const { ids, technologies } = Astro.props;
   {ids.map((id) => {
     const technology = technologies.find((item) => item.id === id);
     return technology && (
-      <li class="inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 px-3 py-1.5 text-xs text-muted">
+      <li data-spotlight class="relative isolate inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-xs text-muted">
+        <SpotlightGlow variant="edge" />
         <TechnologyIcon id={id} class="size-3.5 shrink-0" />
         {technology.name}
       </li>

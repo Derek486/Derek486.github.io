@@ -1,0 +1,71 @@
+<div
+  data-floating-scrollbar
+  role="scrollbar"
+  aria-label="Desplazamiento de página"
+  aria-orientation="vertical"
+  aria-controls="portfolio-page"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-valuenow="0"
+  tabindex="0"
+  hidden
+>
+  <span data-scroll-track aria-hidden="true">
+    <span data-scroll-thumb></span>
+  </span>
+</div>
+
+<style>
+  [data-floating-scrollbar] {
+    position: fixed;
+    z-index: 45;
+    inset: 16px 8px 16px auto;
+    width: 6px;
+    border-radius: 999px;
+    background-color: var(--color-line);
+    touch-action: none;
+    cursor: pointer;
+  }
+
+  /* Keep a 24px mouse target without widening the visible rail. */
+  [data-floating-scrollbar]::before {
+    content: "";
+    position: absolute;
+    inset: 0 -8px 0 -10px;
+  }
+
+  [data-floating-scrollbar]:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  [data-scroll-track] {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  [data-scroll-thumb] {
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    height: var(--thumb-height, 2rem);
+    background-color: color-mix(in srgb, var(--color-ink) 62%, var(--color-canvas));
+    border-radius: 999px;
+    transform: translateY(var(--thumb-y, 0px));
+  }
+
+  @media (min-width: 768px) and (hover: hover) and (pointer: fine) and (forced-colors: none) {
+    :global(html[data-floating-scroll]) { scrollbar-width: none; }
+    :global(html[data-floating-scroll]::-webkit-scrollbar) { display: none; }
+  }
+
+  @media (width < 768px), (hover: none), (pointer: coarse), (forced-colors: active) {
+    [data-floating-scrollbar] { display: none; }
+  }
+</style>
+
+<script>
+  import { initFloatingScrollbar } from "../behaviors/floating-scrollbar";
+  initFloatingScrollbar();
+</script>

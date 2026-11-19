@@ -8,6 +8,7 @@ import site from "../src/data/site.json" with { type: "json" };
 test("the full-screen code mark opens into the hero animations once per tab", async ({ page }) => {
   await page.addInitScript(() => {
     document.addEventListener("animationstart", (event) => {
+      if (event.animationName === "expand-halo") document.documentElement.dataset.entryHaloStarted = "true";
       if (event.animationName !== "draw-mark" || !(event.target instanceof SVGPathElement)) return;
       const entry = event.target.closest("#portfolio-entry")!;
       const bounds = entry.getBoundingClientRect();
@@ -40,19 +41,21 @@ test("the full-screen code mark opens into the hero animations once per tab", as
   const root = page.locator("html");
   const entry = page.locator("#portfolio-entry");
   await expect(root).toHaveAttribute("data-entry-covered-viewport", "true");
+  await expect(root).toHaveAttribute("data-entry-halo-started", "true");
   await expect(root).toHaveAttribute("data-hero-waited-for-entry", "true");
   await expect(root).toHaveAttribute("data-underline-started", "true");
   await expect(root).toHaveAttribute("data-hero-reveal-started", "true");
   await expect(entry).toBeHidden();
+  await expect(entry.locator("button, a")).toHaveCount(0);
   await page.reload();
   await expect(root).not.toHaveAttribute("data-entry-covered-viewport");
   await expect(entry).toBeHidden();
 });
 
-test("the intro can be skipped with the keyboard", async ({ page }) => {
+test("the decorative intro does not block keyboard access to content", async ({ page }) => {
   await page.goto("./", { waitUntil: "domcontentloaded" });
-  const skip = page.getByRole("button", { name: "Omitir intro" });
-  await skip.focus();
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("link", { name: "Saltar al contenido" })).toBeFocused();
   await page.keyboard.press("Enter");
   await expect(page.locator("#portfolio-entry")).toBeHidden();
   await expect(page.locator("#contenido")).toBeFocused();
@@ -62,6 +65,182 @@ test("a direct link to projects does not play the intro", async ({ page }) => {
   await page.goto("./#proyectos");
   await expect(page.locator("#portfolio-entry")).toBeHidden();
   await expect(page.locator("#proyectos")).toBeInViewport();
+});
+
+test("the matte floating scrollbar supports native scroll, dragging and keyboard", async ({ page }) => {
+  await page.goto("./#inicio");
+  const rail = page.getByRole("scrollbar", { name: "Desplazamiento de página" });
+  const root = page.locator("html");
+  const desktop = await page.evaluate(() => matchMedia("(min-width: 768px) and (hover: hover) and (pointer: fine)").matches);
+  const scroll = (fraction: number) => page.evaluate((position) => {
+    const distance = document.documentElement.scrollHeight - innerHeight;
+    window.scrollTo({ top: position * distance, behavior: "instant" });
+  }, fraction);
+
+  await expect(page.locator("nav [data-reading-progress]")).toHaveCount(0);
+  if (!desktop) {
+    await expect(rail).toBeHidden();
+    await expect(root).not.toHaveCSS("scrollbar-width", "none");
+    await scroll(0.5);
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+    return;
+  }
+
+  await expect(rail).toBeVisible();
+  await expect(root).toHaveCSS("scrollbar-width", "none");
+  await expect(rail).toHaveCSS("right", "8px");
+  await expect(rail).toHaveCSS("width", "6px");
+  await expect(rail).toHaveCSS("backdrop-filter", "none");
+  await expect(rail).toHaveCSS("box-shadow", "none");
+  const handle = rail.locator("[data-scroll-thumb]");
+  const color = await handle.evaluate((element) => getComputedStyle(element).backgroundColor);
+  await expect(rail).toHaveAttribute("aria-valuenow", "0");
+  await scroll(0.5);
+  await expect(rail).toHaveAttribute("aria-valuenow", "50");
+  await expect(handle).toHaveCSS("background-color", color);
+
+  const bounds = (await rail.boundingBox())!;
+  const thumb = (await handle.boundingBox())!;
+  const cursor = page.locator("[data-technical-cursor]");
+  const thumbY = thumb.y + thumb.height / 2;
+  await page.mouse.move(bounds.x + bounds.width + 4, thumbY);
+  await expect(cursor).toBeVisible();
+  await expect(cursor).toHaveAttribute("data-mode", "action");
+  await expect(rail).toHaveCSS("cursor", "none");
+  expect(await rail.evaluate((element) => getComputedStyle(element, "::before").cursor)).toBe("none");
+
+  await page.mouse.move(thumb.x + thumb.width / 2, thumbY);
+  await page.mouse.down();
+  await expect(rail).toHaveAttribute("data-dragging", "");
+  await expect(cursor).toHaveAttribute("data-pressed", "");
+  await page.mouse.move(bounds.x + bounds.width / 2, bounds.y + bounds.height, { steps: 6 });
+  await expect(rail).toHaveAttribute("aria-valuenow", "100");
+  await expect(cursor).toBeVisible();
+  await page.mouse.up();
+  await expect(rail).not.toHaveAttribute("data-dragging");
+  await rail.press("Home");
+  await expect(rail).toHaveAttribute("aria-valuenow", "0");
+  await rail.press("PageDown");
+  await expect(rail).not.toHaveAttribute("aria-valuenow", "0");
+});
+
+test("glass spotlight and the inline crosshair follow mouse capabilities", async ({ page }) => {
+  await page.goto("./#inicio");
+  const panel = page.locator("[data-playground] > [data-spotlight]");
+  const light = panel.locator(":scope > [data-spotlight-glow]");
+  const cursor = page.locator("[data-technical-cursor]");
+  const tab = panel.getByRole("button", { name: "Backend", exact: true });
+  const mouse = await page.evaluate(() => matchMedia("(any-hover: hover) and (any-pointer: fine)").matches);
+  await expect(panel).toHaveCSS("backdrop-filter", "blur(16px)");
+  await expect(light).toHaveCSS("background-image", /^radial-gradient/);
+  await expect(light).not.toHaveAttribute("data-active", "true");
+  if (mouse) {
+    await expect(cursor).toBeHidden();
+    await page.mouse.move(20, 140);
+    await expect(cursor).toBeVisible();
+    await expect(cursor).toHaveAttribute("data-mode", "base");
+    await expect(cursor.locator(".dot")).toHaveCSS("transform", "none");
+    await tab.hover();
+    await expect(tab).toHaveCSS("cursor", "none");
+    await expect(cursor).toHaveAttribute("data-mode", "action");
+    await expect(cursor.locator(".dot")).toHaveCSS("transform", "matrix(1.67, 0, 0, 1.67, 0, 0)");
+    await expect(light).toHaveAttribute("data-active", "true");
+    await expect(light).toHaveCSS("opacity", "1");
+    await page.mouse.down();
+    await expect(cursor).toHaveAttribute("data-pressed", "");
+    await expect(cursor.locator(".axes")).toHaveCSS("transform", "matrix(0.7, 0, 0, 0.7, 0, 0)");
+    await page.mouse.up();
+    await expect(cursor).not.toHaveAttribute("data-pressed");
+    await tab.evaluate((element) => element.setAttribute("disabled", ""));
+    await page.mouse.move(21, 140);
+    await tab.hover();
+    await expect(cursor).toHaveAttribute("data-mode", "disabled");
+    await expect(cursor.locator(".disabled-mark")).toHaveCSS("opacity", "0.86");
+    await page.getByRole("link", { name: "Explorar proyectos" }).hover();
+    await expect(cursor).toHaveAttribute("data-mode", "link");
+    await expect(cursor.locator(".link-mark")).toHaveCSS("opacity", "0.94");
+    const point = await page.locator("h1").evaluate((heading) => {
+      const range = document.createRange();
+      range.selectNodeContents(heading.firstChild!);
+      const rect = range.getClientRects()[0];
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    });
+    await page.mouse.move(point.x, point.y);
+    await expect(cursor).toHaveAttribute("data-mode", "text");
+    await expect(cursor.locator(".beam")).toHaveCSS("opacity", "1");
+    await expect(light).toHaveAttribute("data-active", "false");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await expect(cursor).toBeHidden();
+    await expect(tab).not.toHaveCSS("cursor", "none");
+    await page.emulateMedia({ reducedMotion: "no-preference", forcedColors: "active" });
+    await expect(cursor).toBeHidden();
+    await expect(page.locator("[data-floating-scrollbar]")).toBeHidden();
+  } else {
+    await panel.tap();
+    await expect(cursor).toBeHidden();
+    await expect(light).not.toHaveAttribute("data-active", "true");
+  }
+});
+
+test("project glass tracks the pointer and technology chips reflect only at the edge", async ({ page }) => {
+  await page.goto("./#proyectos");
+  const hero = page.locator("#inicio [data-spotlight-glow='surface']");
+  const cards = page.locator("#proyectos article");
+  const radius = await hero.evaluate((element) => getComputedStyle(element).getPropertyValue("--spotlight-radius"));
+  for (const card of await cards.all()) {
+    const light = card.locator(":scope > [data-spotlight-glow='surface']");
+    await expect(card).toHaveCSS("backdrop-filter", "blur(16px)");
+    await expect(card).toHaveCSS("background-image", "none");
+    await expect(card).toHaveCSS("box-shadow", "none");
+    await expect(light).toHaveCSS("--spotlight-radius", radius);
+    await expect(light).toHaveCSS("opacity", "0");
+  }
+  await expect(page.locator("#proyectos [data-light-side]")).toHaveCount(0);
+
+  const card = page.locator("[data-other-projects] article").first();
+  const light = card.locator(":scope > [data-spotlight-glow='surface']");
+  const chip = card.getByRole("list", { name: "Tecnologías" }).getByRole("listitem").first();
+  const edge = chip.locator("[data-spotlight-glow='edge']");
+  await expect(chip).toHaveCSS("background-image", "none");
+  await expect(edge).toHaveCSS("mask-composite", /^exclude/);
+  const mouse = await page.evaluate(() => matchMedia("(hover: hover) and (pointer: fine)").matches);
+  if (!mouse) {
+    await chip.tap();
+    await expect(light).toHaveCSS("opacity", "0");
+    await expect(edge).toHaveCSS("opacity", "0");
+    return;
+  }
+
+  const featured = page.locator("[data-primary-projects] article").first();
+  const featuredLight = featured.locator(":scope > [data-spotlight-glow='surface']");
+  await featured.hover({ position: { x: 8, y: 8 } });
+  await expect(featuredLight).toHaveAttribute("data-active", "true");
+
+  await chip.scrollIntoViewIfNeeded();
+  await card.locator("[data-reveal='project-details']").evaluate(async (element) => {
+    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    await Promise.allSettled(element.getAnimations().map((animation) => animation.finished));
+  });
+  await chip.hover({ position: { x: 8, y: 8 } });
+  await expect(light).toHaveAttribute("data-active", "true");
+  await expect(edge).toHaveAttribute("data-active", "true");
+  await expect(edge).toHaveCSS("opacity", "1");
+  await expect(featuredLight).toHaveAttribute("data-active", "false");
+  const pointerX = (element: Element) => (element as HTMLElement).style.getPropertyValue("--pointer-x");
+  const cardX = await light.evaluate(pointerX);
+  const edgeX = await edge.evaluate(pointerX);
+  await chip.hover({ position: { x: 24, y: 8 } });
+  await expect.poll(() => light.evaluate(pointerX)).not.toBe(cardX);
+  await expect.poll(() => edge.evaluate(pointerX)).not.toBe(edgeX);
+  await card.hover({ position: { x: 8, y: 8 } });
+  await expect(edge).toHaveCSS("opacity", "0");
+  await expect(light).toHaveCSS("opacity", "1");
+
+  await chip.hover();
+  await expect(edge).toHaveAttribute("data-active", "true");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(light).toHaveCSS("opacity", "0");
+  await expect(edge).toHaveCSS("opacity", "0");
 });
 
 test("contact footer matches the centered sections and offers direct contact channels", async ({ page }) => {
@@ -142,14 +321,15 @@ test("primary project covers share a width and alternate sides on wide screens",
   const narrow = page.viewportSize()!.width < 768;
   const cards = await page.locator("[data-primary-projects] article").evaluateAll((elements) => elements.map((card) => ({
     row: card.getBoundingClientRect().toJSON(),
+    contentWidth: card.clientWidth - parseFloat(getComputedStyle(card).paddingLeft) - parseFloat(getComputedStyle(card).paddingRight),
     cover: card.querySelector("a")!.getBoundingClientRect().toJSON(),
     details: card.querySelector("[data-reveal='project-details']")!.getBoundingClientRect().toJSON(),
   })));
 
-  cards.forEach(({ row, cover, details }, index) => {
+  cards.forEach(({ row, contentWidth, cover, details }, index) => {
     expect(cover.width).toBeCloseTo(cards[0].cover.width);
     if (narrow) {
-      expect(cover.width).toBeCloseTo(row.width);
+      expect(cover.width).toBeCloseTo(contentWidth);
       expect(cover.bottom).toBeLessThan(details.top);
     } else {
       expect(cover.width).toBeLessThan(row.width * 0.55);
@@ -380,14 +560,14 @@ test("applies the neutral editorial and Obsidian palettes", async ({ page }) => 
     ["#mi-stack", "250, 250, 250", "16, 16, 18"],
     ["#experiencia", "245, 245, 246", "24, 24, 28"],
     ["#sobre-mi", "250, 250, 250", "16, 16, 18"],
-    ["#contacto", "245, 245, 246", "24, 24, 28"],
-    ["[data-playground] > div:first-child", "255, 255, 255", "32, 32, 36"],
+    ["#contacto", "16, 16, 18", "16, 16, 18"],
   ];
   for (const [selector, light] of backgrounds) {
     await expect(page.locator(selector)).toHaveCSS("background-color", `rgb(${light})`);
   }
   const panel = page.locator("[data-playground] > div:first-child");
   const heading = page.locator("#proyectos h2").first();
+  const lightSurface = await panel.evaluate((element) => getComputedStyle(element).backgroundColor);
   await expect(panel).toHaveCSS("border-top-color", "rgb(228, 228, 231)");
   await expect(heading).toHaveCSS("color", "rgb(32, 32, 36)");
   await page.getByRole("button", { name: "Activar tema oscuro" }).click();
@@ -395,7 +575,9 @@ test("applies the neutral editorial and Obsidian palettes", async ({ page }) => 
     await expect(page.locator(selector)).toHaveCSS("background-color", `rgb(${dark})`);
   }
   await expect(panel).toHaveCSS("border-top-color", "rgb(53, 53, 59)");
+  await expect(panel).not.toHaveCSS("background-color", lightSurface);
   await expect(heading).toHaveCSS("color", "rgb(245, 245, 246)");
+  await expect(page.locator("#contact-title")).toHaveCSS("color", "rgb(245, 245, 246)");
 });
 
 test("images and local downloads exist; viewport has no horizontal overflow", async ({ page, request }) => {
@@ -431,6 +613,8 @@ test("main content and native menu work without JavaScript", async ({ browser, b
   const page = await context.newPage();
   await page.goto(baseURL!);
   await expect(page.locator("#portfolio-entry")).toBeHidden();
+  await expect(page.locator("[data-technical-cursor]")).toBeHidden();
+  await expect(page.locator("[data-floating-scrollbar]")).toBeHidden();
   await expect(page.locator("h1")).toBeVisible();
   await expect(page.locator("#proyectos article")).toHaveCount(projects.length);
   await expect(page.locator("[data-timeline-node]")).toHaveCount(experience.length);

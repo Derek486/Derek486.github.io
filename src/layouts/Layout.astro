@@ -2,6 +2,8 @@
 import "@fontsource-variable/onest";
 import "@fontsource-variable/fraunces";
 import "@/styles/global.css";
+import FloatingScrollbar from "@/presentation/components/FloatingScrollbar.astro";
+import TechnicalCursor from "@/presentation/components/TechnicalCursor.astro";
 import { assetUrl } from "@/presentation/utils/asset-url";
 
 interface Props { title: string; description: string }
@@ -9,7 +11,7 @@ const { description, title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="es" class="scroll-smooth bg-canvas font-sans text-ink antialiased [color-scheme:light] motion-reduce:scroll-auto dark:[color-scheme:dark]">
+<html id="portfolio-page" lang="es" class="scroll-smooth bg-canvas font-sans text-ink antialiased [color-scheme:light] motion-reduce:scroll-auto dark:[color-scheme:dark]">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
@@ -33,6 +35,8 @@ const { description, title } = Astro.props;
     <slot name="entry" />
     <a href="#contenido" class="fixed top-3 left-4 z-[100] -translate-y-24 rounded-full bg-ink px-5 py-3 text-sm text-canvas focus:translate-y-0">Saltar al contenido</a>
     <slot />
+    <FloatingScrollbar />
+    <TechnicalCursor />
     <script>
       import { initReveals } from "@/presentation/behaviors/reveal";
       if (document.documentElement.hasAttribute("data-portfolio-entry")) {

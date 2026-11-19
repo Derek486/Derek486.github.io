@@ -140,10 +140,16 @@ sus componentes.
 
 ## Interacciones y accesibilidad
 
-- En la primera visita al inicio por pestaña, el símbolo `</>` se dibuja a
-  pantalla completa y dos paneles se abren para dar paso a las animaciones del
-  hero. Se puede omitir; no aparece en enlaces directos ni con movimiento reducido.
+- En la primera visita al inicio por pestaña, el símbolo `</>` se dibuja sobre
+  un halo a pantalla completa. Dos paneles se abren automáticamente; no hay
+  botón de omisión. La intro no aparece en enlaces directos ni con movimiento reducido.
 - Navbar amplio que se convierte en píldora con vidrio esmerilado al hacer scroll.
+- Barra flotante mate junto al borde derecho en escritorio: sigue el scroll
+  nativo y permite arrastrar y navegar por teclado.
+  Sin JavaScript, en pantallas táctiles y con colores forzados queda la barra nativa.
+- Cursor técnico SVG para ratón: cruz, estados de enlace, pulsación y deshabilitado,
+  y forma de I para seleccionar texto. Con movimiento reducido o colores
+  forzados se mantiene el cursor del sistema.
 - Línea de experiencia centrada con hitos alternados en escritorio. En móvil,
   la línea queda a la izquierda para mantener los hitos en una columna.
 - Revelado de secciones, subrayado dibujado y microinteracciones con Tailwind y
@@ -152,7 +158,9 @@ sus componentes.
   cursor preciso. En navegadores compatibles, la imagen continúa con una
   transición nativa al abrir el caso. Los casos funcionan sin JavaScript e
   incluyen arquitectura desplegable con controles HTML.
-- Spotlight ligero del hero, solo con cursor preciso y sin movimiento reducido.
+- Dos luces difusas en el hero y spotlight en el panel de capacidades, solo
+  con ratón y sin movimiento reducido. Reflejos discretos en portadas, herramientas
+  y retrato; el contacto cierra en obsidiana en ambos temas.
 - Panel Frontend / Backend / Infra con herramientas y ejemplos de experiencia,
   operable con ratón, tacto y teclado, sin pseudocódigo decorativo.
 - Paleta editorial clara de blanco, canvas y franjas suaves. En oscuro, los

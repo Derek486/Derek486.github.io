@@ -2,11 +2,11 @@
 import Code from "@/components/icons/Code.astro";
 ---
 
-<div id="portfolio-entry" class="entry" hidden>
-  <div data-entry-panel class="panel panel-left" aria-hidden="true"></div>
-  <div class="panel panel-right" aria-hidden="true"></div>
-  <Code class="mark" aria-hidden="true" />
-  <button type="button" class="skip">Omitir intro</button>
+<div id="portfolio-entry" class="entry" aria-hidden="true" hidden>
+  <div data-entry-panel class="panel panel-left"></div>
+  <div class="panel panel-right"></div>
+  <div data-entry-halo class="halo"></div>
+  <Code class="mark" />
 </div>
 
 <script is:inline>
@@ -24,18 +24,12 @@ import Code from "@/components/icons/Code.astro";
     const root = document.documentElement;
     const entry = document.getElementById("portfolio-entry");
     const panel = entry.querySelector("[data-entry-panel]");
-    const skip = entry.querySelector("button");
     const controller = new AbortController();
     const { signal } = controller;
 
     function reveal() {
       if (!root.hasAttribute("data-portfolio-entry")) return;
       root.removeAttribute("data-portfolio-entry");
-      const skipFocused = document.activeElement === skip;
-      entry.inert = true;
-      if (skipFocused) {
-        document.getElementById("contenido")?.focus({ preventScroll: true });
-      }
       document.dispatchEvent(new Event("portfolio:entry-reveal"));
     }
 
@@ -49,14 +43,8 @@ import Code from "@/components/icons/Code.astro";
     panel.addEventListener("animationstart", reveal, { signal });
     panel.addEventListener("animationend", finish, { signal });
     panel.addEventListener("animationcancel", finish, { signal });
-    skip.addEventListener("click", finish, { signal });
     motion.addEventListener("change", finish, { signal });
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") finish();
-    }, { signal });
-    document.addEventListener("focusin", (event) => {
-      if (!entry.contains(event.target)) finish();
-    }, { signal });
+    document.addEventListener("focusin", finish, { signal, once: true });
     window.addEventListener("scroll", finish, { signal, passive: true });
     window.addEventListener("hashchange", finish, { signal });
     window.addEventListener("pagehide", finish, { signal });
@@ -80,10 +68,12 @@ import Code from "@/components/icons/Code.astro";
     place-items: center;
     overflow: clip;
     color: var(--color-ink);
+    pointer-events: none;
   }
 
   .entry[hidden] { display: none; }
-  .entry[inert] { pointer-events: none; }
+
+  :global([data-portfolio-entry]) .entry { pointer-events: auto; }
 
   .panel {
     position: absolute;
@@ -96,8 +86,19 @@ import Code from "@/components/icons/Code.astro";
   .panel-left { left: 0; --exit-x: -101%; }
   .panel-right { right: 0; --exit-x: 101%; }
 
-  .entry[inert] .panel-left { border-right: 1px solid var(--color-line); }
-  .entry[inert] .panel-right { border-left: 1px solid var(--color-line); }
+  :global(:root:not([data-portfolio-entry])) .panel-left { border-right: 1px solid var(--color-line); }
+  :global(:root:not([data-portfolio-entry])) .panel-right { border-left: 1px solid var(--color-line); }
+
+  .halo {
+    position: absolute;
+    width: clamp(11rem, 34vw, 22rem);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--light-cast) 25%, transparent);
+    background: radial-gradient(circle, color-mix(in srgb, var(--light-cast) 16%, transparent), transparent 70%);
+    box-shadow: 0 0 3rem color-mix(in srgb, var(--light-cast) 14%, transparent);
+    animation: expand-halo calc(var(--open-at) + 260ms) cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
 
   .mark {
     position: relative;
@@ -115,19 +116,6 @@ import Code from "@/components/icons/Code.astro";
   .mark :global(path:nth-child(2)) { animation-delay: 100ms; }
   .mark :global(path:nth-child(3)) { animation-delay: 180ms; }
 
-  .skip {
-    position: absolute;
-    bottom: max(1.25rem, env(safe-area-inset-bottom));
-    min-height: 44px;
-    padding-inline: 1rem;
-    color: var(--color-muted);
-    font-size: 0.75rem;
-    cursor: pointer;
-    animation: exit-mark 180ms ease-in var(--open-at) both;
-  }
-
-  .skip:hover { color: var(--color-ink); }
-
   @keyframes draw-mark {
     from { stroke-dashoffset: 1; opacity: 0; }
     20%, to { opacity: 1; }
@@ -136,6 +124,12 @@ import Code from "@/components/icons/Code.astro";
 
   @keyframes exit-mark {
     to { opacity: 0; }
+  }
+
+  @keyframes expand-halo {
+    from { transform: scale(0.52); opacity: 0; }
+    34% { opacity: 0.85; }
+    to { transform: scale(1.85); opacity: 0; }
   }
 
   @keyframes open-panel {

@@ -1,0 +1,43 @@
+---
+interface Props { variant?: "surface" | "edge" }
+const { variant = "surface" } = Astro.props;
+---
+
+<span data-spotlight-glow={variant} aria-hidden="true"></span>
+
+<style>
+  [data-spotlight-glow] {
+    --spotlight-radius: 14rem;
+    --spotlight-strength: 25%;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image: radial-gradient(
+      circle var(--spotlight-radius) at var(--pointer-x, 50%) var(--pointer-y, 50%),
+      color-mix(in srgb, var(--light-cast) var(--spotlight-strength), transparent),
+      transparent 100%
+    );
+    opacity: 0;
+  }
+
+  [data-spotlight-glow="edge"] {
+    --spotlight-radius: 3.5rem;
+    --spotlight-strength: 85%;
+    inset: -1px;
+    padding: 1px;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    [data-spotlight-glow] { transition: opacity 300ms ease; }
+    [data-spotlight-glow][data-active="true"] { opacity: 1; }
+  }
+</style>
+
+<script>
+  import { initSpotlight } from "../behaviors/spotlight";
+  initSpotlight();
+</script>

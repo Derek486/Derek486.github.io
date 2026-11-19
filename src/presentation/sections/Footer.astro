@@ -10,7 +10,7 @@ const linkedIn = profile.socials.find((social) => social.label === "LinkedIn");
 const otherSocials = profile.socials.filter((social) => social !== linkedIn);
 ---
 
-<footer id="contacto" data-nav-section aria-labelledby="contact-title" class="section-alternate scroll-mt-28 px-6 pb-6 md:px-10">
+<footer id="contacto" data-nav-section aria-labelledby="contact-title" class="contact-close scroll-mt-28 border-t border-line px-6 pb-6 md:px-10">
   <div class="mx-auto flex max-w-6xl flex-col gap-10 py-16 md:gap-14 md:py-24">
     <h2 id="contact-title" class="text-balance font-display text-4xl leading-[1.12] tracking-[-0.04em] text-ink md:text-5xl">
       <span class="block">{content.eyebrow}</span>
@@ -33,7 +33,7 @@ const otherSocials = profile.socials.filter((social) => social !== linkedIn);
           )}
         </div>
       </div>
-      <div class="min-w-0 border-t border-line pt-8 lg:justify-self-end lg:border-0 lg:pt-0">
+      <div class="glass-surface min-w-0 rounded-2xl border border-line p-6 lg:w-full lg:max-w-sm lg:justify-self-end">
         <p class="mb-3 text-sm text-muted">{content.directLabel}</p>
         <a href={`mailto:${profile.email}`} class="inline-flex min-h-11 max-w-full items-center break-all text-base leading-7 text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-ink md:text-lg">
           {profile.email}
@@ -49,3 +49,19 @@ const otherSocials = profile.socials.filter((social) => social !== linkedIn);
     </nav>
   </div>
 </footer>
+
+<style>
+  .contact-close {
+    color-scheme: dark;
+    --color-canvas: #101012;
+    --color-surface: #202024;
+    --color-ink: #f5f5f6;
+    --color-muted: #f5f5f6b8;
+    --color-accent: #f5f5f6;
+    --color-line: #35353b;
+    --light-cast: #a1b7d9;
+    color: var(--color-ink);
+    background-color: var(--color-canvas);
+    background-image: radial-gradient(ellipse min(45rem, 95vw) 21rem at 91% 28%, color-mix(in srgb, var(--light-cast) 13%, transparent), transparent);
+  }
+</style>
