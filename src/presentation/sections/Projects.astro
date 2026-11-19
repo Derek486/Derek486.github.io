@@ -11,7 +11,7 @@ const primaryProjects = projects.filter((project) => project.primary);
 const otherProjects = projects.filter((project) => !project.primary);
 ---
 
-<section id="proyectos" data-nav-section class="section-alternate scroll-mt-28 px-6 py-16 md:px-10 md:py-24">
+<section id="proyectos" data-nav-section class="project-light section-alternate scroll-mt-28 px-6 py-16 md:px-10 md:py-24">
   <div class="mx-auto max-w-6xl">
     <SectionHeading {...content} />
     {primaryProjects.length > 0 && (
@@ -31,3 +31,13 @@ const otherProjects = projects.filter((project) => !project.primary);
     )}
   </div>
 </section>
+
+<style>
+  /* Align the first two lights with the alternating text columns. */
+  .project-light {
+    background-image:
+      radial-gradient(ellipse min(42rem, 90vw) 24% at 18% 18%, var(--ambient-light), transparent 88%),
+      radial-gradient(ellipse min(43rem, 90vw) 27% at 84% 47%, var(--ambient-light), transparent 90%),
+      radial-gradient(ellipse min(49rem, 100vw) 26% at 28% 81%, var(--ambient-light), transparent 88%);
+  }
+</style>

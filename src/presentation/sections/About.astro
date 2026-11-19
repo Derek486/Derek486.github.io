@@ -8,7 +8,7 @@ interface Props { profile: Profile; content: SiteContent["about"] }
 const { profile, content } = Astro.props;
 ---
 
-<section id="sobre-mi" data-nav-section class="scroll-mt-28 bg-canvas px-6 py-16 md:px-10 md:py-24">
+<section id="sobre-mi" data-nav-section class="ambient-wash scroll-mt-28 bg-canvas px-6 py-16 [--ambient-origin:40%_38%] md:px-10 md:py-24 md:[--ambient-origin:22%_58%]">
   <div class="mx-auto max-w-6xl">
     <SectionHeading {...content} />
     <div class="grid items-center gap-12 md:grid-cols-[1fr_2fr] md:gap-20">

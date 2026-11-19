@@ -6,6 +6,7 @@ export interface Profile {
   role: string;
   availability: string;
   email: string;
+  phone: string;
   resume: string;
   image: string;
   imageAlt: string;

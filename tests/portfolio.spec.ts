@@ -139,6 +139,8 @@ test("glass spotlight and the inline crosshair follow mouse capabilities", async
     await page.mouse.move(20, 140);
     await expect(cursor).toBeVisible();
     await expect(cursor).toHaveAttribute("data-mode", "base");
+    await expect(cursor).toHaveCSS("color", "rgb(32, 32, 36)");
+    await expect(cursor.locator("feFlood")).toHaveCSS("flood-color", "rgb(250, 250, 250)");
     await expect(cursor.locator(".dot")).toHaveCSS("transform", "none");
     await tab.hover();
     await expect(tab).toHaveCSS("cursor", "none");
@@ -243,20 +245,35 @@ test("project glass tracks the pointer and technology chips reflect only at the 
   await expect(edge).toHaveCSS("opacity", "0");
 });
 
-test("contact footer matches the centered sections and offers direct contact channels", async ({ page }) => {
+test("contact footer aligns its introduction, contact details and social links", async ({ page }) => {
   await page.goto("./");
   const footer = page.getByRole("contentinfo");
   await footer.scrollIntoViewIfNeeded();
-  await expect(footer.getByRole("heading", { level: 2 })).toContainText(site.contact.eyebrow);
-  await expect(footer.getByRole("heading", { level: 2 })).toContainText(site.contact.title);
-  await expect(footer.getByText(site.contact.description)).toBeVisible();
-  await expect(footer.getByText(site.contact.directLabel)).toBeVisible();
-  const action = footer.getByRole("link", { name: site.contact.action });
-  await expect(action).toHaveAttribute("href", `mailto:${profile.email}`);
-  await expect(footer.getByRole("link", { name: profile.email })).toHaveAttribute("href", `mailto:${profile.email}`);
-  const linkedIn = footer.getByRole("link", { name: "LinkedIn" });
-  await expect(linkedIn).toHaveAttribute("href", profile.socials.find((social) => social.label === "LinkedIn")!.href);
-  await expect(linkedIn).toHaveAttribute("rel", "noopener noreferrer");
+  const title = footer.getByRole("heading", { level: 2 });
+  await expect(title).toContainText(site.contact.eyebrow);
+  await expect(title).toContainText(site.contact.title);
+  const description = footer.getByText(site.contact.description);
+  await expect(description).toBeVisible();
+  const email = footer.getByRole("region", { name: site.contact.emailLabel });
+  const phone = footer.getByRole("region", { name: "Teléfono" });
+  const emailLink = email.getByRole("link", { name: profile.email });
+  const phoneLink = phone.getByRole("link", { name: profile.phone });
+  await expect(emailLink).toHaveAttribute("href", `mailto:${profile.email}`);
+  await expect(phoneLink).toHaveAttribute("href", "tel:+51957806344");
+  const linkSize = (element: Element) => parseFloat(getComputedStyle(element).fontSize);
+  expect(await emailLink.evaluate(linkSize)).toBeGreaterThan(await phoneLink.evaluate(linkSize));
+  const mutedColor = await phone.getByRole("heading").evaluate((element) => getComputedStyle(element).color);
+  await expect(email.getByRole("heading")).toHaveCSS("color", mutedColor);
+  await expect(footer.getByText("Datos de contacto", { exact: true })).toHaveCount(0);
+  await expect(footer.getByText("Correo", { exact: true })).toHaveCount(0);
+  const socials = footer.getByRole("navigation", { name: "Redes" });
+  for (const { label, href } of profile.socials) {
+    await expect(socials.getByRole("link", { name: label })).toHaveAttribute("href", href);
+    await expect(socials.getByRole("link", { name: label })).toHaveAttribute("rel", "noopener noreferrer");
+  }
+  const bottom = footer.locator(":scope > div").last();
+  await expect(bottom.getByRole("link")).toHaveCount(1);
+  await expect(bottom.getByRole("link", { name: "Volver arriba" })).toHaveAttribute("href", "#inicio");
   await page.evaluate(() => document.fonts.ready);
   for (const width of [320, 393, 768, 1440, 1920]) {
     await page.setViewportSize({ width, height: 1000 });
@@ -266,16 +283,26 @@ test("contact footer matches the centered sections and offers direct contact cha
       expect(bounds!.x).toBe(section!.x);
       expect(bounds!.width).toBe(section!.width);
     }
-    const sectionHeading = await page.locator("#sobre-mi h2").evaluate((element) => getComputedStyle(element).fontSize);
-    await expect(footer.getByRole("heading", { level: 2 })).toHaveCSS("font-size", sectionHeading);
+    const sectionHeading = await page.locator("#sobre-mi h2").evaluate((element) => parseFloat(getComputedStyle(element).fontSize));
+    expect(await title.evaluate((element) => parseFloat(getComputedStyle(element).fontSize))).toBeLessThan(sectionHeading);
+    const titleBounds = (await title.boundingBox())!;
+    const descriptionBounds = (await description.boundingBox())!;
+    const emailBounds = (await email.boundingBox())!;
+    const phoneBounds = (await phone.boundingBox())!;
+    const socialsBounds = (await socials.boundingBox())!;
+    expect(emailBounds.y).toBeGreaterThan(descriptionBounds.y + descriptionBounds.height);
+    expect(phoneBounds.y).toBe(socialsBounds.y);
+    expect(socialsBounds.x).toBeGreaterThan(phoneBounds.x);
+    if (width >= 768) {
+      expect(descriptionBounds.x).toBeGreaterThan(titleBounds.x);
+      expect(emailBounds.x).toBe(titleBounds.x);
+      expect(phoneBounds.x).toBe(descriptionBounds.x);
+      expect(phoneBounds.y).toBe(emailBounds.y);
+    } else {
+      expect(descriptionBounds.y).toBeGreaterThan(titleBounds.y + titleBounds.height);
+      expect(phoneBounds.y).toBeGreaterThan(emailBounds.y + emailBounds.height);
+    }
   }
-  await expect(footer).toHaveCSS("min-height", "0px");
-  await action.hover();
-  const colors = await action.evaluate((element) => {
-    const style = getComputedStyle(element);
-    return { text: style.color, background: style.backgroundColor };
-  });
-  expect(colors.text).not.toBe(colors.background);
 });
 
 test("renders full stack content from JSON without runtime errors", async ({ page }) => {
@@ -560,23 +587,36 @@ test("applies the neutral editorial and Obsidian palettes", async ({ page }) => 
     ["#mi-stack", "250, 250, 250", "16, 16, 18"],
     ["#experiencia", "245, 245, 246", "24, 24, 28"],
     ["#sobre-mi", "250, 250, 250", "16, 16, 18"],
-    ["#contacto", "16, 16, 18", "16, 16, 18"],
+    ["#contacto", "250, 250, 250", "16, 16, 18"],
   ];
   for (const [selector, light] of backgrounds) {
     await expect(page.locator(selector)).toHaveCSS("background-color", `rgb(${light})`);
   }
   const panel = page.locator("[data-playground] > div:first-child");
   const heading = page.locator("#proyectos h2").first();
+  const footer = page.getByRole("contentinfo");
+  const ambientSurfaces = ["#proyectos", "#mi-stack", "#sobre-mi"].map((selector) => page.locator(selector));
+  const lightWashes = await Promise.all(ambientSurfaces.map(async (surface) => {
+    await expect(surface).toHaveCSS("background-image", /^radial-gradient/);
+    return surface.evaluate((element) => getComputedStyle(element).backgroundImage);
+  }));
   const lightSurface = await panel.evaluate((element) => getComputedStyle(element).backgroundColor);
   await expect(panel).toHaveCSS("border-top-color", "rgb(228, 228, 231)");
   await expect(heading).toHaveCSS("color", "rgb(32, 32, 36)");
+  await expect(footer).toHaveCSS("color-scheme", "light");
+  await expect(page.locator("#contact-title")).toHaveCSS("color", "rgb(32, 32, 36)");
   await page.getByRole("button", { name: "Activar tema oscuro" }).click();
   for (const [selector, , dark] of backgrounds) {
     await expect(page.locator(selector)).toHaveCSS("background-color", `rgb(${dark})`);
   }
+  for (const [index, surface] of ambientSurfaces.entries()) {
+    await expect(surface).toHaveCSS("background-image", /^radial-gradient/);
+    await expect(surface).not.toHaveCSS("background-image", lightWashes[index]);
+  }
   await expect(panel).toHaveCSS("border-top-color", "rgb(53, 53, 59)");
   await expect(panel).not.toHaveCSS("background-color", lightSurface);
   await expect(heading).toHaveCSS("color", "rgb(245, 245, 246)");
+  await expect(footer).toHaveCSS("color-scheme", "dark");
   await expect(page.locator("#contact-title")).toHaveCSS("color", "rgb(245, 245, 246)");
 });
 
@@ -620,7 +660,7 @@ test("main content and native menu work without JavaScript", async ({ browser, b
   await expect(page.locator("[data-timeline-node]")).toHaveCount(experience.length);
   await expect(page.locator("[data-timeline-node]").first()).toBeVisible();
   await expect(page.locator("#experiencia").getByRole("heading", { name: experience[0].title, exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Hablemos de tu proyecto" })).toHaveAttribute("href", `mailto:${profile.email}`);
+  await expect(page.getByRole("link", { name: profile.email })).toHaveAttribute("href", `mailto:${profile.email}`);
   if (testInfo.project.name === "mobile") {
     await page.getByLabel("Abrir menú de navegación").click();
     await expect(page.locator("[data-mobile-menu]")).toHaveAttribute("open", "");

@@ -18,7 +18,6 @@
     "eyebrow": "¿Tienes una idea?",
     "title": "Hagámosla realidad.",
     "description": "Una aplicación web, una solución para tu empresa o una colaboración técnica. Cuéntame qué necesitas y conversemos sobre cómo convertirlo en software que impulse tu proyecto.",
-    "action": "Hablemos de tu proyecto",
-    "directLabel": "¿Prefieres escribir directamente?"
+    "emailLabel": "Hablemos de tu próximo proyecto"
   }
 }
