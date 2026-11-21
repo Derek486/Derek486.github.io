@@ -23,6 +23,9 @@ import Figma from "@/components/icons/technologies/Figma.astro";
 import Vue from "@/components/icons/technologies/Vue.astro";
 import CSharp from "@/components/icons/technologies/CSharp.astro";
 import DotNet from "@/components/icons/technologies/DotNet.astro";
+import Sql from "@/components/icons/technologies/Sql.astro";
+import Linux from "@/components/icons/technologies/Linux.astro";
+import Pipeline from "@/components/icons/technologies/Pipeline.astro";
 
 interface Props { id: string; class?: string }
 const { id, class: className } = Astro.props;
@@ -31,7 +34,7 @@ const icons = {
   nodejs: Node, express: Express, django: Django, springboot: Spring, laravel: Laravel,
   jwt: JWT, mysql: MySQL, mongodb: MongoDB, postgresql: PostgreSQL, sqlite: SQLite,
   sequelize: Sequelize, docker: Docker, nginx: Nginx, git: Git, tauri: Tauri, iot: IoT, figma: Figma,
-  vue: Vue, csharp: CSharp, dotnet: DotNet,
+  vue: Vue, csharp: CSharp, dotnet: DotNet, sql: Sql, linux: Linux, cicd: Pipeline,
 };
 const Icon = icons[id as keyof typeof icons];
 ---

@@ -5,7 +5,8 @@
     "title": "Desarrollador Full Stack",
     "company": "Smart Reasons",
     "description": "Desarrollo interfaces funcionales integradas con APIs en una arquitectura basada en microservicios. Optimizo consultas SQL mediante el manejo de índices y pruebas de estrés.",
-    "technologies": ["sql"]
+    "technologies": ["sql"],
+    "keyTechnologies": ["sql"]
   },
   {
     "id": "tecsup-lead",
@@ -13,7 +14,8 @@
     "title": "Lead Full Stack Developer",
     "company": "Instituto Tecnológico TECSUP",
     "description": "Lideré el desarrollo de una plataforma de gestión administrativa y control de asistencia mediante tarjetas RFID en tiempo real. Administré servidores y bases de datos y apliqué control de versiones con Git, GitHub y CI/CD.",
-    "technologies": ["iot", "git", "cicd"]
+    "technologies": ["iot", "git", "cicd"],
+    "keyTechnologies": ["iot", "cicd"]
   },
   {
     "id": "tecsup",
@@ -21,7 +23,8 @@
     "title": "Desarrollador Full Stack · DevOps",
     "company": "Instituto Tecnológico TECSUP",
     "description": "Contribuí al desarrollo de una plataforma de eventos deportivos y scoreboard en tiempo real para administrar equipos y puntajes del campeonato. Administré servidores Linux y bases de datos PostgreSQL, con control de versiones y CI/CD.",
-    "technologies": ["react", "tailwind", "express", "postgresql", "linux", "cicd"]
+    "technologies": ["react", "tailwind", "express", "postgresql", "linux", "cicd"],
+    "keyTechnologies": ["postgresql", "linux"]
   },
   {
     "id": "bitio",
@@ -29,7 +32,8 @@
     "title": "Pasante de desarrollo Full Stack",
     "company": "Bitio S.R.L.",
     "description": "Agilicé la generación de cotizaciones de cableado estructurado y la gestión de inventario. Lideré el diseño de la plataforma en Figma e implementé una aplicación de escritorio con Tauri y SQLite para la migración y persistencia de datos.",
-    "technologies": ["react", "tauri", "sqlite", "figma"]
+    "technologies": ["react", "tauri", "sqlite", "figma"],
+    "keyTechnologies": ["tauri", "sqlite"]
   },
   {
     "id": "sinh",
@@ -37,6 +41,7 @@
     "title": "DevOps y diseño de interfaces",
     "company": "Sinh company",
     "description": "Colaboré en el diseño de una plataforma de comercio electrónico y me encargué del despliegue y mantenimiento de sus servidores.",
-    "technologies": ["figma"]
+    "technologies": ["figma"],
+    "keyTechnologies": ["figma"]
   }
 ]

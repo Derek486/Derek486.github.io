@@ -6,4 +6,5 @@ export interface PlaygroundLayer {
   example: string;
   experienceId: string;
   technologies: string[];
+  keyTechnologies?: string[];
 }

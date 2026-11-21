@@ -27,7 +27,7 @@ const home = assetUrl("/");
         </div>
         <div class="space-y-5">
           <p class="max-w-xl text-pretty text-base leading-7 text-muted">{project.description}</p>
-          <TechnologyList ids={project.technologies} technologies={technologies} />
+          <TechnologyList ids={project.technologies} technologies={technologies} emphasis={project.keyTechnologies} />
         </div>
       </div>
     </div>

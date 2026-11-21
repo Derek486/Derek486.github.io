@@ -1,22 +1,26 @@
 ---
 import type { Technology } from "@/domain/types/technology";
-import SpotlightGlow from "./SpotlightGlow.astro";
 import TechnologyIcon from "./TechnologyIcon.astro";
 
 interface Props {
   ids: string[];
   technologies: Technology[];
+  emphasis?: readonly string[];
+  compact?: boolean;
 }
-const { ids, technologies } = Astro.props;
+const { ids, technologies, emphasis = [], compact = false } = Astro.props;
 ---
 
-<ul class="flex flex-wrap gap-2" aria-label="Tecnologías">
+<ul role="list" class:list={["flex flex-wrap", compact ? "gap-1.5" : "gap-2"]} aria-label="Tecnologías">
   {ids.map((id) => {
     const technology = technologies.find((item) => item.id === id);
     return technology && (
-      <li data-spotlight class="relative isolate inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-xs text-muted">
-        <SpotlightGlow variant="edge" />
-        <TechnologyIcon id={id} class="size-3.5 shrink-0" />
+      <li class:list={[
+        "inline-flex max-w-full items-center rounded-full border border-line text-xs wrap-anywhere",
+        compact ? "gap-1.5 bg-surface/65 px-2 py-1" : "gap-2 bg-surface px-3 py-1.5",
+        emphasis.includes(id) ? "font-bold text-ink" : "text-muted",
+      ]}>
+        <TechnologyIcon id={id} class:list={[compact ? "size-3" : "size-3.5", "shrink-0"]} />
         {technology.name}
       </li>
     );

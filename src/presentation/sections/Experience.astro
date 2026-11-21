@@ -11,43 +11,37 @@ const { experiences, technologies, content } = Astro.props;
 
 <section id="experiencia" data-nav-section class="section-alternate scroll-mt-28 px-6 py-16 md:px-10 md:py-24">
   <div class="mx-auto max-w-6xl">
-    <SectionHeading {...content} />
-    <ol data-experience-timeline role="list" class="[--timeline-axis:0.5rem] [--timeline-node-top:0.625rem] md:[--timeline-axis:50%]">
+    <SectionHeading {...content} reveal={false} />
+    <ol data-experience-timeline role="list" class="experience-timeline">
       {experiences.map((experience, index) => (
         <li
           id={`experiencia-${experience.id}`}
-          class="relative scroll-mt-28 pl-8 not-last:pb-10 md:grid md:grid-cols-2 md:gap-x-20 md:pl-0 md:not-last:pb-12"
+          class="experience-entry relative grid scroll-mt-28 items-start not-last:pb-[clamp(2.5rem,5vw,4rem)]"
         >
           {index < experiences.length - 1 && (
-            <span aria-hidden="true" class="absolute top-(--timeline-node-top) left-(--timeline-axis) bottom-[calc(-1*var(--timeline-node-top))] w-px -translate-x-1/2 bg-ink/20">
-              <span data-timeline-segment class="timeline-light block h-full origin-top scale-y-[var(--timeline-progress,0)] bg-accent motion-reduce:hidden"></span>
+            <span aria-hidden="true" class="timeline-track absolute top-(--node-top) left-(--axis) bottom-[calc(-1*var(--node-top))] w-px -translate-x-1/2 bg-ink/20">
+              <span data-timeline-segment class="block h-full origin-top scale-y-[var(--timeline-progress,0)] bg-ink motion-reduce:hidden"></span>
             </span>
           )}
           <span
             aria-hidden="true"
-            class:list={[
-              "absolute top-(--timeline-node-top) left-(--timeline-axis) h-px w-4 -translate-y-1/2 bg-ink/20 md:w-8",
-              index % 2 !== 0 && "md:-translate-x-full",
-            ]}
-          ></span>
-          <span
-            aria-hidden="true"
             data-timeline-node
-            class="absolute top-(--timeline-node-top) left-(--timeline-axis) size-2.5 -translate-1/2 rounded-full border border-muted bg-alternate data-[reached]:border-accent data-[reached]:bg-accent"
+            class="absolute top-(--node-top) left-(--axis) size-2.5 -translate-1/2 rounded-full border border-muted bg-alternate data-[reached]:border-ink data-[reached]:bg-ink motion-safe:transition-colors"
           ></span>
-          <div
-            data-reveal="experience"
-            class:list={[
-              "min-w-0 w-full max-w-md md:row-start-1",
-              index % 2 === 0 ? "md:col-start-2" : "md:col-start-1 md:justify-self-end",
-            ]}
-          >
-            <p class="text-sm tabular-nums text-muted">{experience.date}</p>
-            <p class="mt-1 text-sm font-medium text-ink">{experience.company}</p>
-            <h3 class="mt-3 mb-2 text-xl font-semibold tracking-tight text-ink">{experience.title}</h3>
-            <p class="mb-4 text-sm leading-7 text-muted">{experience.description}</p>
-            <TechnologyList ids={experience.technologies} technologies={technologies} />
+          <div data-experience-meta class="min-w-0 wrap-anywhere">
+            <p class="text-xs leading-6 font-medium text-muted tabular-nums">{experience.date}</p>
+            <p class="text-sm leading-6 font-medium text-ink">{experience.company}</p>
           </div>
+          <div data-experience-details class="min-w-0 wrap-anywhere">
+            <h3 class="mb-2 text-xl leading-6 font-bold tracking-tight text-ink">{experience.title}</h3>
+            <p class="max-w-[60ch] text-sm leading-7 text-muted">{experience.description}</p>
+          </div>
+          {experience.technologies.length > 0 && (
+            <div data-experience-technologies class="min-w-0">
+              <h4 class="mb-2 text-xs leading-6 font-semibold text-ink">Tecnologías</h4>
+              <TechnologyList ids={experience.technologies} technologies={technologies} emphasis={experience.keyTechnologies} compact />
+            </div>
+          )}
         </li>
       ))}
     </ol>
@@ -55,12 +49,37 @@ const { experiences, technologies, content } = Astro.props;
 </section>
 
 <style>
-  .timeline-light {
-    box-shadow: 0 0 0.6rem 0.1rem color-mix(in srgb, var(--light-cast) 36%, transparent);
+  .experience-timeline {
+    --axis: 0.5rem;
+    --node-top: 0.75rem;
   }
 
-  [data-timeline-node][data-reached] {
-    box-shadow: 0 0 0.75rem color-mix(in srgb, var(--light-cast) 48%, transparent);
+  .experience-entry {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.75rem;
+    padding-inline-start: 2rem;
+  }
+
+  @media (width >= 60rem) {
+    .experience-timeline { --axis: 22%; }
+
+    .experience-entry {
+      --column-inset: clamp(1.5rem, 3vw, 2.5rem);
+      grid-template-columns: minmax(0, 22fr) minmax(0, 45fr) minmax(0, 33fr);
+      padding-inline-start: 0;
+    }
+
+    [data-experience-meta] { padding-inline-end: var(--column-inset); }
+    [data-experience-details] { padding-inline: var(--column-inset) calc(var(--column-inset) / 2); }
+    [data-experience-technologies] { padding-inline-start: calc(var(--column-inset) / 2); }
+  }
+
+  @media (forced-colors: active) {
+    .timeline-track, [data-timeline-node] { forced-color-adjust: none; }
+    .timeline-track { background-color: GrayText; }
+    [data-timeline-segment] { background-color: CanvasText; }
+    [data-timeline-node] { background-color: Canvas; border-color: GrayText; }
+    [data-timeline-node][data-reached] { background-color: CanvasText; border-color: CanvasText; }
   }
 </style>
 

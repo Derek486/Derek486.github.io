@@ -12,11 +12,6 @@ const scrollReveals = {
     duration: 560,
     delay: 65,
   },
-  experience: {
-    keyframes: [{ opacity: 0.38, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }],
-    duration: 560,
-    delay: 0,
-  },
 } satisfies Record<string, { keyframes: Keyframe[]; duration: number; delay: number }>;
 
 export function initReveals() {

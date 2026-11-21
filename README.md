@@ -101,6 +101,8 @@ sistemas operativos. Hotel Vallesur, Events Management y Employee App se mantien
 en «Más proyectos». Las imágenes nuevas se sirven como WebP locales optimizados.
 El campo `experienceId` del panel del hero enlaza con un ID de `experience.json`;
 una referencia inexistente también detiene la compilación.
+El campo opcional `keyTechnologies` destaca chips en negrita; sus IDs deben
+estar incluidos en `technologies` de la misma entrada.
 
 Los datos profesionales se actualizaron a partir del CV en `public/files/`.
 Consulta [las fuentes y criterios de contenido](docs/content-sources.md).
@@ -150,18 +152,19 @@ sus componentes.
 - Cursor técnico SVG para ratón: cruz, estados de enlace, pulsación y deshabilitado,
   y forma de I para seleccionar texto. Con movimiento reducido o colores
   forzados se mantiene el cursor del sistema.
-- Línea de experiencia centrada con hitos alternados en escritorio. En móvil,
-  la línea queda a la izquierda para mantener los hitos en una columna.
+- Experiencia en tres columnas (fechas y empresa, cargo y descripción,
+  tecnologías), con el eje desplazado a la izquierda y nodos que se activan
+  al hacer scroll. En móvil, el contenido se apila y el eje queda junto al margen izquierdo.
 - Revelado de secciones, subrayado dibujado y microinteracciones con Tailwind y
   Web Animations API.
 - Las portadas aparecen en perspectiva al entrar en vista y se inclinan con un
   cursor preciso. En navegadores compatibles, la imagen continúa con una
   transición nativa al abrir el caso. Los casos funcionan sin JavaScript e
   incluyen arquitectura desplegable con controles HTML.
-- Dos luces difusas en el hero y spotlight en el panel de capacidades, solo
-  con ratón y sin movimiento reducido. Reflejos discretos en portadas, herramientas
-  y retrato; el contacto cierra en obsidiana en ambos temas.
-- Panel Frontend / Backend / Infra con herramientas y ejemplos de experiencia,
+- Luz ambiental que acompaña al cursor detrás del vidrio del hero y los proyectos,
+  incluso fuera de las tarjetas. Las sombras son fijas; la luz móvil se desactiva
+  con movimiento o transparencia reducidos y con colores forzados.
+- Panel Frontend / Backend / Infra con carril, chips y ejemplos de experiencia,
   operable con ratón, tacto y teclado, sin pseudocódigo decorativo.
 - Paleta editorial clara de blanco, canvas y franjas suaves. En oscuro, los
   fondos obsidiana se separan de las tarjetas con bordes y texto de alto contraste.

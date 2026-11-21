@@ -2,6 +2,7 @@
 import type { Project } from "@/domain/types/project";
 import type { Technology } from "@/domain/types/technology";
 import type { SiteContent } from "@/domain/types/site-content";
+import CursorLight from "../components/CursorLight.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 
@@ -11,8 +12,9 @@ const primaryProjects = projects.filter((project) => project.primary);
 const otherProjects = projects.filter((project) => !project.primary);
 ---
 
-<section id="proyectos" data-nav-section class="project-light section-alternate scroll-mt-28 px-6 py-16 md:px-10 md:py-24">
-  <div class="mx-auto max-w-6xl">
+<section id="proyectos" data-nav-section class="project-light section-alternate relative scroll-mt-28 px-6 py-16 md:px-10 md:py-24">
+  <CursorLight />
+  <div class="relative mx-auto max-w-6xl">
     <SectionHeading {...content} />
     {primaryProjects.length > 0 && (
       <div data-primary-projects class="flex flex-col gap-10 md:gap-12">

@@ -1,0 +1,39 @@
+<div data-cursor-light aria-hidden="true">
+  <span></span>
+</div>
+
+<style>
+  [data-cursor-light] {
+    display: none;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  @media (any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+    [data-cursor-light] { display: block; }
+
+    [data-cursor-light] span {
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: clamp(24rem, 45vw, 40rem);
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle closest-side, var(--cursor-light), transparent);
+      opacity: 0;
+      transition: opacity 180ms ease-out;
+    }
+
+    [data-cursor-light][data-lit] span { opacity: 1; }
+  }
+
+  @media (prefers-reduced-transparency: reduce), (forced-colors: active) {
+    [data-cursor-light] { display: none; }
+  }
+</style>
+
+<script>
+  import { initCursorLight } from "../behaviors/cursor-light";
+  initCursorLight();
+</script>

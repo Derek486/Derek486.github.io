@@ -3,7 +3,6 @@ import type { Project } from "@/domain/types/project";
 import type { Technology } from "@/domain/types/technology";
 import ActionLink from "./ActionLink.astro";
 import ProjectCover from "./ProjectCover.astro";
-import SpotlightGlow from "./SpotlightGlow.astro";
 import TechnologyList from "./TechnologyList.astro";
 import { projectAnchor, projectUrl } from "../utils/project-url";
 
@@ -18,15 +17,13 @@ const { project, technologies, coverSide } = Astro.props;
 <article
   id={projectAnchor(project.id)}
   data-project={project.id}
-  data-spotlight
   class:list={[
-    "project-glass glass-surface relative isolate min-w-0 scroll-mt-28 rounded-2xl border border-line p-4 lg:p-5",
+    "glass-surface min-w-0 scroll-mt-28 rounded-2xl border border-line p-4 lg:p-5",
     coverSide
       ? "md:grid md:grid-cols-2 md:items-center md:gap-8 lg:gap-12"
-      : "flex flex-col",
+      : "flex flex-col [--glass-card-depth:var(--card-shadow-soft)]",
   ]}
 >
-  <SpotlightGlow />
   <a
     href={projectUrl(project.id)}
     aria-label={`Ver proyecto: ${project.title}`}
@@ -58,7 +55,7 @@ const { project, technologies, coverSide } = Astro.props;
           {project.highlights.map((highlight) => <li>{highlight}</li>)}
         </ul>
       )}
-      <TechnologyList ids={project.technologies} technologies={technologies} />
+      <TechnologyList ids={project.technologies} technologies={technologies} emphasis={project.keyTechnologies} />
     </div>
     <div class="flex shrink-0 flex-wrap gap-2">
       <ActionLink href={project.github} target="_blank" variant="secondary">Ver código</ActionLink>
@@ -66,10 +63,3 @@ const { project, technologies, coverSide } = Astro.props;
     </div>
   </div>
 </article>
-
-<style>
-  .project-glass {
-    background-image: none;
-    box-shadow: none;
-  }
-</style>

@@ -3,4 +3,5 @@ export interface StackGroup {
   title: string;
   description: string;
   technologies: string[];
+  keyTechnologies?: string[];
 }

@@ -14,6 +14,12 @@ export function getPortfolio(repository: PortfolioRepository) {
           throw new Error(`Tecnología desconocida "${id}" en "${item.id}". Revisa src/data/.`);
         }
       }
+
+      for (const id of item.keyTechnologies ?? []) {
+        if (!item.technologies.includes(id)) {
+          throw new Error(`La tecnología destacada "${id}" debe estar en "${item.id}". Revisa src/data/.`);
+        }
+      }
     }
   }
 

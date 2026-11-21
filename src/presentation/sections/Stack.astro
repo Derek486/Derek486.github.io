@@ -17,7 +17,7 @@ const { groups, technologies, content } = Astro.props;
         <article class="border-t border-line pt-6">
           <h3 class="mb-2 text-xl font-medium tracking-tight text-ink">{group.title}</h3>
           <p class="mb-5 max-w-md text-sm leading-7 text-muted">{group.description}</p>
-          <TechnologyList ids={group.technologies} technologies={technologies} />
+          <TechnologyList ids={group.technologies} technologies={technologies} emphasis={group.keyTechnologies} />
         </article>
       ))}
     </div>

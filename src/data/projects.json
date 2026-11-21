@@ -16,6 +16,7 @@
       "Persistencia en PostgreSQL y servicios desplegables con Docker Compose."
     ],
     "technologies": ["react", "csharp", "dotnet", "flask", "kafka", "postgresql", "docker"],
+    "keyTechnologies": ["react", "dotnet", "kafka"],
     "caseStudy": {
       "problem": "¿Cómo probar un sistema de monitoreo industrial sin tener un sensor físico conectado? Motor Manager separa la administración de motores de la generación de telemetría. Así se puede registrar un motor y ensayar el flujo con lecturas simuladas.",
       "caption": "Diagrama del sistema: panel de administración, telemetría simulada y servicios de procesamiento.",
@@ -54,6 +55,7 @@
       "Intérprete de comandos y servidor TCP separados en módulos."
     ],
     "technologies": ["cpp"],
+    "keyTechnologies": ["cpp"],
     "caseStudy": {
       "problem": "Una base de datos normalmente oculta cómo interpreta un comando, localiza un registro y lo guarda en disco. PSIS-DB hace visibles esas operaciones en un prototipo educativo escrito en C++17.",
       "caption": "Organización del motor: cliente y servidor TCP, intérprete, índice y archivos binarios.",
@@ -92,6 +94,7 @@
       "Gantt de CPU y entrada/salida, marcos de memoria y métricas de simulación."
     ],
     "technologies": ["java", "swing"],
+    "keyTechnologies": ["java"],
     "caseStudy": {
       "problem": "Las colas de CPU, la memoria y la entrada/salida suelen estudiarse por separado. Esta aplicación permite observar cómo interactúan: un proceso puede esperar por CPU, bloquearse por entrada/salida o necesitar una página que aún no está en memoria.",
       "caption": "Simulación completada con diagramas Gantt, evolución de los marcos de memoria y registro de eventos.",
@@ -124,6 +127,7 @@
     "imageWidth": 764,
     "imageHeight": 371,
     "technologies": ["react", "springboot", "mysql", "tailwind"],
+    "keyTechnologies": ["react", "springboot"],
     "caseStudy": {
       "problem": "La gestión de un alquiler une varios registros: departamento, inquilino, contrato y pagos. Vallesur los organiza en una aplicación con dos flujos: el gerente administra departamentos y agentes; el agente lleva contratos y cobros.",
       "caption": "Inicio de sesión de Hotel Vallesur, punto de entrada a los paneles de gerentes y agentes.",
@@ -155,6 +159,7 @@
     "imageWidth": 1918,
     "imageHeight": 752,
     "technologies": ["django", "sqlite"],
+    "keyTechnologies": ["django"],
     "caseStudy": {
       "problem": "Publicar un evento y participar en él son acciones distintas. La aplicación separa ambas: cada evento tiene un organizador, mientras que la inscripción relaciona a cada participante con el evento que eligió.",
       "caption": "Catálogo de eventos con portadas, fechas y acceso a los perfiles de organizadores.",
@@ -186,6 +191,7 @@
     "imageWidth": 1920,
     "imageHeight": 691,
     "technologies": ["mongodb", "express", "angular", "nodejs"],
+    "keyTechnologies": ["angular", "nodejs"],
     "caseStudy": {
       "problem": "Un directorio de empleados es un dominio acotado para practicar una aplicación full stack: además de listar registros, hay que enviarlos desde formularios, validar los datos y reflejar los cambios persistidos en la interfaz.",
       "caption": "Vista del directorio de empleados en Angular.",

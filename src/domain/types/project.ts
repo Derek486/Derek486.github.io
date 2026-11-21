@@ -18,6 +18,7 @@ export interface Project {
   };
   link?: string;
   technologies: string[];
+  keyTechnologies?: string[];
   primary?: boolean;
   highlights?: string[];
 }

@@ -124,16 +124,12 @@ test("the matte floating scrollbar supports native scroll, dragging and keyboard
   await expect(rail).not.toHaveAttribute("aria-valuenow", "0");
 });
 
-test("glass spotlight and the inline crosshair follow mouse capabilities", async ({ page }) => {
+test("the inline crosshair follows mouse capabilities", async ({ page }) => {
   await page.goto("./#inicio");
-  const panel = page.locator("[data-playground] > [data-spotlight]");
-  const light = panel.locator(":scope > [data-spotlight-glow]");
+  const panel = page.locator("[data-playground]");
   const cursor = page.locator("[data-technical-cursor]");
   const tab = panel.getByRole("button", { name: "Backend", exact: true });
   const mouse = await page.evaluate(() => matchMedia("(any-hover: hover) and (any-pointer: fine)").matches);
-  await expect(panel).toHaveCSS("backdrop-filter", "blur(16px)");
-  await expect(light).toHaveCSS("background-image", /^radial-gradient/);
-  await expect(light).not.toHaveAttribute("data-active", "true");
   if (mouse) {
     await expect(cursor).toBeHidden();
     await page.mouse.move(20, 140);
@@ -146,8 +142,6 @@ test("glass spotlight and the inline crosshair follow mouse capabilities", async
     await expect(tab).toHaveCSS("cursor", "none");
     await expect(cursor).toHaveAttribute("data-mode", "action");
     await expect(cursor.locator(".dot")).toHaveCSS("transform", "matrix(1.67, 0, 0, 1.67, 0, 0)");
-    await expect(light).toHaveAttribute("data-active", "true");
-    await expect(light).toHaveCSS("opacity", "1");
     await page.mouse.down();
     await expect(cursor).toHaveAttribute("data-pressed", "");
     await expect(cursor.locator(".axes")).toHaveCSS("transform", "matrix(0.7, 0, 0, 0.7, 0, 0)");
@@ -170,7 +164,6 @@ test("glass spotlight and the inline crosshair follow mouse capabilities", async
     await page.mouse.move(point.x, point.y);
     await expect(cursor).toHaveAttribute("data-mode", "text");
     await expect(cursor.locator(".beam")).toHaveCSS("opacity", "1");
-    await expect(light).toHaveAttribute("data-active", "false");
     await page.emulateMedia({ reducedMotion: "reduce" });
     await expect(cursor).toBeHidden();
     await expect(tab).not.toHaveCSS("cursor", "none");
@@ -180,69 +173,50 @@ test("glass spotlight and the inline crosshair follow mouse capabilities", async
   } else {
     await panel.tap();
     await expect(cursor).toBeHidden();
-    await expect(light).not.toHaveAttribute("data-active", "true");
   }
 });
 
-test("project glass tracks the pointer and technology chips reflect only at the edge", async ({ page }) => {
-  await page.goto("./#proyectos");
-  const hero = page.locator("#inicio [data-spotlight-glow='surface']");
-  const cards = page.locator("#proyectos article");
-  const radius = await hero.evaluate((element) => getComputedStyle(element).getPropertyValue("--spotlight-radius"));
-  for (const card of await cards.all()) {
-    const light = card.locator(":scope > [data-spotlight-glow='surface']");
-    await expect(card).toHaveCSS("backdrop-filter", "blur(16px)");
-    await expect(card).toHaveCSS("background-image", "none");
-    await expect(card).toHaveCSS("box-shadow", "none");
-    await expect(light).toHaveCSS("--spotlight-radius", radius);
-    await expect(light).toHaveCSS("opacity", "0");
+test("ambient cursor light reaches the glass from outside the cards while shadows stay fixed", async ({ page }) => {
+  await page.goto("./#inicio");
+  const heroCard = page.locator("[data-playground] > div").first();
+  const projects = page.locator("#proyectos");
+  for (const card of [heroCard, ...await projects.locator("article").all()]) {
+    await expect(card).toHaveCSS("backdrop-filter", /blur\([1-9]\d*(?:\.\d+)?px\)/);
+    await expect(card).toHaveCSS("box-shadow", /inset.+?, .+?, .+/);
+    await expect(card.locator("[data-cursor-light], [data-spotlight]")).toHaveCount(0);
   }
-  await expect(page.locator("#proyectos [data-light-side]")).toHaveCount(0);
-
-  const card = page.locator("[data-other-projects] article").first();
-  const light = card.locator(":scope > [data-spotlight-glow='surface']");
-  const chip = card.getByRole("list", { name: "Tecnologías" }).getByRole("listitem").first();
-  const edge = chip.locator("[data-spotlight-glow='edge']");
-  await expect(chip).toHaveCSS("background-image", "none");
-  await expect(edge).toHaveCSS("mask-composite", /^exclude/);
-  const mouse = await page.evaluate(() => matchMedia("(hover: hover) and (pointer: fine)").matches);
+  const heroLight = page.locator("#inicio > [data-cursor-light]");
+  const projectLight = projects.locator(":scope > [data-cursor-light]");
+  const mouse = await page.evaluate(() => matchMedia("(any-hover: hover) and (any-pointer: fine)").matches);
   if (!mouse) {
-    await chip.tap();
-    await expect(light).toHaveCSS("opacity", "0");
-    await expect(edge).toHaveCSS("opacity", "0");
+    await expect(heroLight).toBeHidden();
+    await expect(projectLight).toBeHidden();
     return;
   }
 
-  const featured = page.locator("[data-primary-projects] article").first();
-  const featuredLight = featured.locator(":scope > [data-spotlight-glow='surface']");
-  await featured.hover({ position: { x: 8, y: 8 } });
-  await expect(featuredLight).toHaveAttribute("data-active", "true");
-
-  await chip.scrollIntoViewIfNeeded();
-  await card.locator("[data-reveal='project-details']").evaluate(async (element) => {
-    await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    await Promise.allSettled(element.getAnimations().map((animation) => animation.finished));
-  });
-  await chip.hover({ position: { x: 8, y: 8 } });
-  await expect(light).toHaveAttribute("data-active", "true");
-  await expect(edge).toHaveAttribute("data-active", "true");
-  await expect(edge).toHaveCSS("opacity", "1");
-  await expect(featuredLight).toHaveAttribute("data-active", "false");
-  const pointerX = (element: Element) => (element as HTMLElement).style.getPropertyValue("--pointer-x");
-  const cardX = await light.evaluate(pointerX);
-  const edgeX = await edge.evaluate(pointerX);
-  await chip.hover({ position: { x: 24, y: 8 } });
-  await expect.poll(() => light.evaluate(pointerX)).not.toBe(cardX);
-  await expect.poll(() => edge.evaluate(pointerX)).not.toBe(edgeX);
-  await card.hover({ position: { x: 8, y: 8 } });
-  await expect(edge).toHaveCSS("opacity", "0");
-  await expect(light).toHaveCSS("opacity", "1");
-
-  await chip.hover();
-  await expect(edge).toHaveAttribute("data-active", "true");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(light).toHaveCSS("opacity", "0");
-  await expect(edge).toHaveCSS("opacity", "0");
+  const verifyOutside = async (card: typeof heroCard, light: typeof heroLight, side: "left" | "top") => {
+    const bounds = (await card.boundingBox())!;
+    const shadow = await card.evaluate((element) => getComputedStyle(element).boxShadow);
+    const x = Math.round(bounds.x + (side === "left" ? -28 : bounds.width / 2));
+    const y = Math.round(bounds.y + (side === "top" ? -28 : bounds.height / 2));
+    await page.mouse.move(x, y);
+    const glow = light.locator("span");
+    await expect(light).toHaveAttribute("data-lit", "");
+    await expect(glow).toHaveCSS("opacity", "1");
+    await expect.poll(async () => {
+      const rect = (await glow.boundingBox())!;
+      return Math.hypot(rect.x + rect.width / 2 - x, rect.y + rect.height / 2 - y);
+    }).toBeLessThan(1);
+    await page.mouse.move(bounds.x + 8, bounds.y + 8);
+    await expect(card).toHaveCSS("box-shadow", shadow);
+  };
+  await verifyOutside(heroCard, heroLight, "left");
+  await projects.evaluate((section) => section.scrollIntoView({ behavior: "instant" }));
+  await verifyOutside(projects.locator("[data-primary-projects] article").first(), projectLight, "top");
+  await page.emulateMedia({ forcedColors: "active" });
+  await expect(projectLight).toBeHidden();
+  await page.emulateMedia({ forcedColors: "none", reducedMotion: "reduce" });
+  await expect(projectLight).toBeHidden();
 });
 
 test("contact footer aligns its introduction, contact details and social links", async ({ page }) => {
@@ -344,7 +318,9 @@ test("prioritizes the three new projects and preserves the original collection",
 });
 
 test("primary project covers share a width and alternate sides on wide screens", async ({ page }) => {
-  await page.goto("./");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("./#proyectos");
+  await expect(page.getByRole("complementary", { name: "Áreas de trabajo" })).toHaveCount(0);
   const narrow = page.viewportSize()!.width < 768;
   const cards = await page.locator("[data-primary-projects] article").evaluateAll((elements) => elements.map((card) => ({
     row: card.getBoundingClientRect().toJSON(),
@@ -460,32 +436,62 @@ test("project showcase expands architecture by keyboard and links to the next ca
   await expect(page.locator(`[data-project="${second.id}"]`)).toBeInViewport();
 });
 
-test("experience entries alternate around a continuous centered axis on wide screens", async ({ page }) => {
-  await page.goto("./");
-  const narrow = page.viewportSize()!.width < 768;
-  const entries = await page.locator("[data-experience-timeline] > li").evaluateAll((elements) => elements.map((entry) => ({
-    row: entry.getBoundingClientRect().toJSON(),
-    node: entry.querySelector("[data-timeline-node]")!.getBoundingClientRect().toJSON(),
-    content: entry.querySelector("[data-reveal='experience']")!.getBoundingClientRect().toJSON(),
-    track: entry.querySelector("[data-timeline-segment]")?.parentElement?.getBoundingClientRect().toJSON(),
-  })));
+test("experience sets a 22/45/33 layout with one continuous axis and icon badges", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("./#experiencia");
+  const list = page.locator("[data-experience-timeline] > li");
+  await expect(list).toHaveCount(experience.length);
+  for (const [index, entry] of experience.entries()) {
+    const row = list.nth(index);
+    await expect(row.getByText(entry.date, { exact: true })).toBeVisible();
+    await expect(row.getByText(entry.company, { exact: true })).toBeVisible();
+    await expect(row.getByRole("heading", { name: entry.title, exact: true })).toHaveCSS("font-weight", "700");
+    await expect(row.getByRole("heading", { name: "Tecnologías", exact: true })).toBeVisible();
+    const badges = row.getByRole("list", { name: "Tecnologías" }).getByRole("listitem");
+    await expect(badges).toHaveCount(entry.technologies.length);
+    await expect(badges.locator("svg[aria-hidden=true]")).toHaveCount(entry.technologies.length);
+  }
 
-  entries.forEach(({ row, node, content, track }, index) => {
-    const axis = node.left + node.width / 2;
-    if (narrow) {
-      expect(axis).toBeCloseTo(row.left + 8);
-      expect(content.left).toBeGreaterThan(node.right);
-    } else {
-      expect(axis).toBeCloseTo(row.left + row.width / 2);
-      if (index % 2 === 0) expect(content.left).toBeGreaterThan(node.right);
-      else expect(content.right).toBeLessThan(node.left);
+  for (const width of [320, 768, 960, 1440]) {
+    await page.setViewportSize({ width, height: 960 });
+    const entries = await list.evaluateAll((elements) => elements.map((entry) => ({
+      row: entry.getBoundingClientRect().toJSON(),
+      node: entry.querySelector("[data-timeline-node]")!.getBoundingClientRect().toJSON(),
+      meta: entry.querySelector("[data-experience-meta]")!.getBoundingClientRect().toJSON(),
+      details: entry.querySelector("[data-experience-details]")!.getBoundingClientRect().toJSON(),
+      tech: entry.querySelector("[data-experience-technologies]")!.getBoundingClientRect().toJSON(),
+      track: entry.querySelector("[data-timeline-segment]")?.parentElement?.getBoundingClientRect().toJSON(),
+      marks: entry.querySelectorAll(":scope > span").length,
+    })));
+
+    for (const [index, { row, node, meta, details, tech, track, marks }] of entries.entries()) {
+      const axis = node.left + node.width / 2;
+      expect(marks).toBe(track ? 2 : 1);
+      expect(meta.top).toBeCloseTo(row.top);
+      if (width < 960) {
+        expect(axis).toBeCloseTo(row.left + 8);
+        expect(meta.left).toBeGreaterThan(node.right);
+        expect(details.left).toBeCloseTo(meta.left);
+        expect(tech.left).toBeCloseTo(meta.left);
+        expect(meta.bottom).toBeLessThan(details.top);
+        expect(details.bottom).toBeLessThan(tech.top);
+      } else {
+        expect(axis).toBeCloseTo(row.left + row.width * 0.22, 0);
+        expect(meta.width / row.width).toBeCloseTo(0.22);
+        expect(details.width / row.width).toBeCloseTo(0.45);
+        expect(tech.width / row.width).toBeCloseTo(0.33);
+        expect(details.left).toBeCloseTo(meta.right);
+        expect(tech.left).toBeCloseTo(details.right);
+        expect(details.top).toBeCloseTo(meta.top);
+        expect(tech.top).toBeCloseTo(meta.top);
+      }
+      if (track) {
+        const next = entries[index + 1].node;
+        expect(track.top).toBeCloseTo(node.top + node.height / 2);
+        expect(track.bottom).toBeCloseTo(next.top + next.height / 2);
+      }
     }
-    if (track) {
-      const next = entries[index + 1].node;
-      expect(track.top).toBeCloseTo(node.top + node.height / 2);
-      expect(track.bottom).toBeCloseTo(next.top + next.height / 2);
-    }
-  });
+  }
 });
 
 test("experience timeline connects entries in sync with scroll", async ({ page }) => {
@@ -550,6 +556,7 @@ test("theme toggles and persists across reloads", async ({ page }) => {
 test("playground supports keyboard and each layer shows matching content", async ({ page }) => {
   await page.goto("./");
   await expect(page.locator("#portfolio-entry")).toBeHidden();
+  await expect(page.locator("[data-layer-controls]")).toHaveCSS("box-shadow", /inset/);
   for (const layer of playground) {
     const button = page.getByRole("button", { name: layer.label, exact: true });
     await button.focus();
@@ -559,6 +566,10 @@ test("playground supports keyboard and each layer shows matching content", async
     await expect(panel).toBeVisible();
     await expect(panel).toContainText(layer.description);
     await expect(panel).toContainText(layer.example);
+    const chips = panel.getByRole("list", { name: "Tecnologías" }).locator("li");
+    for (const [index, id] of layer.technologies.entries()) {
+      await expect(chips.nth(index)).toHaveCSS("font-weight", layer.keyTechnologies.includes(id) ? "700" : "400");
+    }
     await expect(panel.getByRole("link", { name: "Ver experiencia relacionada" })).toHaveAttribute("href", `#experiencia-${layer.experienceId}`);
     await expect(page.locator("[data-layer-panel]:visible")).toHaveCount(1);
   }
